@@ -10,7 +10,10 @@
     "pg": "4.x",
     "express": "~4.9.x",
     "body-parser": "~1.13.1",
-    "open-graph": "~0.1.5"
+    "open-graph": "~0.1.5",
+    "lodash": "~3.9.3",
+    "sql": "~0.52.0",
+    "promise": "~7.0.3"
   },
   "engines": {
     "node": "0.12.2"
