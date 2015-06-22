@@ -58,11 +58,12 @@ function openGraph(url) {
     });
 };
 
-function getTopicForUrl(url) {
+function getTopics(url) {
     return db(
         items.select(items.topic)
           .from(items)
           .where(items.url.equals(url))
+          .limit(1)
           .toQuery()
     );
 }
@@ -81,20 +82,28 @@ function addItem(ogMeta, topic) {
 }
 
 app.get('/', function(req, res) {
-    var parentUrl = req.query.parentUrl;
+    var parentUrl = req.query.parentUrl,
+        form = '<form method="post" action="/"><input name="parentUrl" type="hidden" value="' + parentUrl + '"><input style="width: 50%;" type="text" name="childUrl"><input type="submit"></form>';
 
     if (parentUrl) {
-        getAll().then(
-            function(result) {
-                var form = '<form method="post" action="/"><input name="parentUrl" type="hidden" value="' + parentUrl + '"><input style="width: 50%;" type="text" name="childUrl"><input type="submit"></form>';
+        getTopics(parentUrl)
+        .then(function (result) {
+            var topic;
 
-                res.send(form + '<pre>' + JSON.stringify(result.rows, null, 4) + '</pre>');
-            },
-            function(err) {
-                res.send(err);
+            if (result.rows && result.rows[0]) {
+                topic = result.rows[0].topic;
+                getTopicItems(topic).then(
+                    function(result) {
+                        res.send(form + '<pre>' + JSON.stringify(result.rows, null, 4) + '</pre>');
+                    },
+                    function(err) {
+                        res.send(err);
+                    }
+                );
+            } else {
+                res.send(form);
             }
-        );  
-
+        }); 
     } else {
         res.send('No parentUrl query param!')
     }
@@ -113,15 +122,15 @@ app.post('/', urlencodedParser, function (req, res) {
     parentUrl = clean(req.body.parentUrl);
 
     if (childUrl && parentUrl) {
-        getTopicForUrl(parentUrl).then(
+        getTopics(parentUrl).then(
             function(result) {
                 var topic,
                     openGraphs = [openGraph(childUrl)];
 
-                if (result.rows && result.rows.length) {
-                    topic = _.last(result.rows).topic;
+                if (result.rows && result.rows[0]) {
+                    topic = result.rows[0].topic;
                 } else {
-                    topic = sha1(childUrl + parentUrl);
+                    topic = sha1(parentUrl);
                     openGraphs.push(openGraph(parentUrl));
                 }
 
@@ -152,8 +161,13 @@ app.post('/', urlencodedParser, function (req, res) {
     }
 })
 
-function getAll() {
-    return db(items.select(items.star()).from(items).toQuery());  
+function getTopicItems(topic) {
+    return db(
+        items.select(items.star())
+        .from(items)
+        .where(items.topic.equals(topic))
+        .toQuery()
+    );
 }
 
 app.listen(app.get('port'), function() {
