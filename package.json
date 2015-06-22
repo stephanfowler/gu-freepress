@@ -7,13 +7,14 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "pg": "4.x",
-    "express": "~4.9.x",
     "body-parser": "~1.13.1",
-    "open-graph": "~0.1.5",
+    "express": "~4.9.x",
     "lodash": "~3.9.3",
-    "sql": "~0.52.0",
-    "promise": "~7.0.3"
+    "open-graph": "~0.1.5",
+    "pg": "4.x",
+    "promise": "~7.0.3",
+    "sha1": "^1.1.1",
+    "sql": "~0.52.0"
   },
   "engines": {
     "node": "0.12.2"

@@ -7,6 +7,7 @@ var express = require('express'),
     pg = require('pg'),
     og = require('open-graph'),
     sql = require('sql'),
+    sha1 = require('sha1'),
     Promise = require('promise'),
     _ = require('lodash'),
 
@@ -86,7 +87,7 @@ app.get('/', function(req, res) {
     if (parentUrl) {
         getAll().then(
             function(result) {
-                var form = '<form method="post" action="/"><input name="parentUrl" type="hidden" value="' + parentUrl + '"><input style="width: 50%;" type="text" name="childUrl"><input type="submit"></form><br />';
+                var form = '<form method="post" action="/"><input name="parentUrl" type="hidden" value="' + parentUrl + '"><input style="width: 50%;" type="text" name="childUrl"><input type="submit"></form>';
 
                 res.send(form + '<pre>' + JSON.stringify(result.rows, null, 4) + '</pre>');
             },
@@ -115,13 +116,13 @@ app.post('/', urlencodedParser, function (req, res) {
     if (childUrl && parentUrl) {
         getTopicForUrl(parentUrl).then(
             function(result) {
-                var topic
+                var topic,
                     openGraphs = [openGraph(childUrl)];
 
-                if (result.rows && result.rows[0] && result.rows[0].topic) {
-                    topic = result.rows[0].topic;
+                if (result.rows && result.rows.length) {
+                    topic = _.last(result.rows).topic;
                 } else {
-                    topic = parentUrl;
+                    topic = sha1(childUrl + parentUrl);
                     openGraphs.push(openGraph(parentUrl));
                 }
 
