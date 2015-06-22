@@ -1,5 +1,5 @@
 /*
-create table items (topic text NOT NULL, url text NOT NULL, title text, description text, image_url text, site_name text, unique (url, topic));
+create table items (topic text NOT NULL, url text NOT NULL, likes INT, title text, description text, image_url text, site_name text, unique (url, topic));
 */
 
 var express = require('express'),
@@ -15,7 +15,7 @@ var express = require('express'),
     urlencodedParser = bodyParser.urlencoded({ extended: false }),
     itemsSchema = {
         name: 'items',
-        columns: ['topic', 'url', 'title', 'description', 'image_url', 'site_name']
+        columns: ['topic', 'url', 'likes', 'title', 'description', 'image_url', 'site_name']
     },
     items = sql.define(itemsSchema);
 
@@ -67,16 +67,15 @@ function getTopicForUrl(url) {
     );
 }
 
-function addItem(spec, topic) {
-    var props = itemsSchema.columns.reduce(function(acc, key) {
-            acc[key] = spec[key] || null;
-            return acc;
+function addItem(ogMeta, topic) {
+    var props = itemsSchema.columns.reduce(function(props, key) {
+            props[key] = ogMeta[key] || null;
+            return props;
         }, {});
 
     props.topic = topic;
-    props.image_url = spec.image ? spec.image.url : null;
-
-    console.log(items.insert(props).toQuery());
+    props.likes = 1;
+    props.image_url = ogMeta.image ? ogMeta.image.url : null;
 
     return db(items.insert(props).toQuery());
 }
