@@ -1,0 +1,16 @@
+#items-container {
+    min-height: 50px;
+    background: #efe;
+}
+
+.item {
+    background: #fff;    
+}
+
+.item img {
+    width: 100px;
+}
+
+.under-drag {
+    background: #eeeeee;
+}

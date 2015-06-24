@@ -21,7 +21,7 @@ var express = require('express'),
 
 
 app.set('port', (process.env.PORT || 5000));
-
+app.set('view engine', 'jade');
 app.use(express.static(__dirname + '/public'));
 
 function clean(url) {
@@ -82,8 +82,7 @@ function addItem(ogMeta, topic) {
 }
 
 app.get('/', function(req, res) {
-    var parentUrl = req.query.parentUrl,
-        form = '<form method="post" action="/"><input name="parentUrl" type="hidden" value="' + parentUrl + '"><input style="width: 50%;" type="text" name="childUrl"><input type="submit"></form>';
+    var parentUrl = req.query.parentUrl;
 
     if (parentUrl) {
         getTopics(parentUrl)
@@ -94,14 +93,20 @@ app.get('/', function(req, res) {
                 topic = result.rows[0].topic;
                 getTopicItems(topic).then(
                     function(result) {
-                        res.send(form + '<pre>' + JSON.stringify(result.rows, null, 4) + '</pre>');
+                        res.render('index', { 
+                            parentUrl: parentUrl,
+                            items: result.rows 
+                        });
                     },
                     function(err) {
                         res.send(err);
                     }
                 );
             } else {
-                res.send(form);
+                res.render('index', { 
+                    parentUrl: parentUrl,
+                    items: []
+                });
             }
         }); 
     } else {
@@ -109,11 +114,13 @@ app.get('/', function(req, res) {
     }
 });
 
-app.post('/', urlencodedParser, function (req, res) {
+app.post('/api/add', urlencodedParser, function (req, res) {
     var childUrl,
         parentUrl,
         query;
 
+    res.setHeader('Content-Type', 'application/json');
+    
     if (!req.body) {
         return res.sendStatus(400);
     }
@@ -136,7 +143,7 @@ app.post('/', urlencodedParser, function (req, res) {
 
                 Promise.all(openGraphs)
                 .catch(function(err) {
-                    res.redirect("/?error=openGraphs&parentUrl=" + parentUrl);
+                    res.send({error: 'failed fetching opengraphs'});
                 })
                 .then(function(ogMetas) {
                     Promise.all(
@@ -145,19 +152,26 @@ app.post('/', urlencodedParser, function (req, res) {
                         })
                     )
                     .catch(function(err) {
-                        res.redirect("/?error=addItems&parentUrl=" + parentUrl);
+                        res.send({error: 'failed adding items'});
                     })
                     .then(function() {
-                        res.redirect("/?parentUrl=" + parentUrl);
+                        getTopicItems(topic).then(
+                            function(result) {
+                                res.send({items: result.rows});
+                            },
+                            function(err) {
+                                res.send({error: 'failed fetching topic'});
+                            }
+                        );
                     })
                 })
             },
             function(err) {
-                res.send(err);
+                res.send({error: 'failed attempting to find existing topic'});
             }
         );
     } else {
-        res.send('No parentUrl form value!')
+        res.send({error: 'No parentUrl and childUrl'});
     }
 })
 
