@@ -50,7 +50,7 @@ var Items = React.createClass({
         return (
             <div id='items-container' onDrop={this.drop} onDragOver={this.dragOver} onDragLeave={this.dragLeave} className={this.state.isUnderDrag ? 'under-drag' : ''}>
                 {this.state.relatedItems.map(function(item, index) {
-                    return <div key={index} className="item">
+                    return <div key={item.url} className="item">
                         <img src={item.image_url} />
                         <a href={item.url}>{item.title}</a>
                     </div>
