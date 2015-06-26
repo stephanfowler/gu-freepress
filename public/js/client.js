@@ -35,10 +35,14 @@ var Items = React.createClass({
                 parentUrl: self.props.parentUrl,
                 childUrl: childUrl
             },
-        }).done(function (result) {
-            self.setState({
-                relatedItems: result.items
-            });
+        }).done(function (result, statusTxt, xhr) {
+            if (xhr.status === 200) {
+                self.setState({
+                    relatedItems: result.items
+                });
+            }
+        }).fail(function (result) {
+            console.log(result && result.message);
         });
 
         this.setState({
@@ -47,9 +51,11 @@ var Items = React.createClass({
     },
 
     render: function () {
+        var self = this;
+
         return (
             <div id='items-container' onDrop={this.drop} onDragOver={this.dragOver} onDragLeave={this.dragLeave} className={this.state.isUnderDrag ? 'under-drag' : ''}>
-                {this.state.relatedItems.map(function(item, index) {
+                {self.state.relatedItems.map(function(item, index) {
                     return <div key={item.url} className="item">
                         <img src={item.image_url} />
                         <a href={item.url}>{item.title}</a>

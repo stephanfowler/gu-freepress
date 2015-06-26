@@ -143,7 +143,8 @@ app.post('/api/add', urlencodedParser, function (req, res) {
 
                 Promise.all(openGraphs)
                 .catch(function(err) {
-                    res.send({error: 'failed fetching opengraphs'});
+                    res.status(304);
+                    console.log('Failed to find any opengraph data');
                 })
                 .then(function(ogMetas) {
                     Promise.all(
@@ -152,26 +153,31 @@ app.post('/api/add', urlencodedParser, function (req, res) {
                         })
                     )
                     .catch(function(err) {
-                        res.send({error: 'failed adding items'});
+                        res.status(304);
+                        console.log('Didn\'t add anything new');
                     })
                     .then(function() {
                         getTopicItems(topic).then(
                             function(result) {
+                                res.status(200);
                                 res.send({items: result.rows});
                             },
                             function(err) {
-                                res.send({error: 'failed fetching topic'});
+                                res.status(304);
+                                console.log('Failed fetching that topic');
                             }
                         );
                     })
                 })
             },
             function(err) {
-                res.send({error: 'failed attempting to find existing topic'});
+                res.status(500);
+                console.log('Failed while talking to database');
             }
         );
     } else {
-        res.send({error: 'No parentUrl and childUrl'});
+        res.status(400);
+        console.log('No parentUrl and childUrl');
     }
 })
 
