@@ -1,16 +1,94 @@
+body {
+    overflow: hidden;
+    margin: 0;
+
+    font-family: "Guardian Egyptian Web","Guardian Text Egyptian Web",Georgia,serif;
+    font-size: 16px;
+    font-weight: normal;
+    height: 60px;
+    line-height: 20px;
+    -webkit-box-orient: vertical;
+    -webkit-font-smoothing: antialiased;
+    -webkit-line-clamp: 4;
+    cursor: pointer;
+    display: -webkit-box;
+}
+
+body, a {
+    color: rgb(51, 51, 51);
+    text-decoration: none;        
+}
+
 #items-container {
     min-height: 50px;
     background: #efe;
-}
-
-.item {
-    background: #fff;    
-}
-
-.item img {
-    width: 100px;
+    width: 300px;
 }
 
 .under-drag {
-    background: #eeeeee;
+    opacity: .6;
+}
+
+.item {
+    display: block;
+    position: relative;
+    background: #fff;
+    overflow: hidden;
+    border-bottom: 8px solid #fff;
+    padding-top: 2px;
+    height: 100px;
+}
+
+.item .siteName {
+    text-transform: capitalize;
+    font-weight: bold;
+    line-height:  18px;
+    padding-top: 2px;
+}
+
+.item .likes {
+    position: absolute;
+    right: 0px;
+    top: 2px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.item:hover .likes {
+    color: #005689;
+}
+
+.item:hover .likes:before {
+    content: 'rate this?';
+    font-weight: normal;
+    font-size: 14px;
+    margin-right: 4px;
+}
+
+.item .likes:after {
+    content: '☆';
+    margin-left: 2px;
+}
+
+.item:hover .likes:after {
+    content: '★';
+}
+
+.item .title {
+    display: block;
+    margin-left: 130px;
+    color: rgb(51, 51, 51);
+}
+
+.item .image {
+    position: absolute;
+    top: 26px;
+
+    width: 120px;
+    height: 72px;
+    position: absolute;
+    background-color: black;
+    background-size: cover;
+    background-position: center center;
 }

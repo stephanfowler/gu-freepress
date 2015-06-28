@@ -87,12 +87,14 @@ Item = React.createClass({
     },
 
     render: function () {
-        return <div key={this.props.item.url} className="item">
-            <img src={this.props.item.image_url} />
-            <a href={this.props.item.url}>{this.props.item.title}</a>
-            <span className='likes'>{this.props.item.likes}</span>
-            <span className='like' onClick={this.handleClick}> LIKE </span>
-        </div>
+        return <a key={this.props.item.url} className="item" href={this.props.item.url}>
+            <div className='siteName'>{this.props.item.site_name}</div>
+            <div className='image' style={{'background-image': 'url(' + this.props.item.image_url + ')'}}></div>
+            <div className='title'>{this.props.item.title}</div>
+            <div className='likes'onClick={this.handleClick}>
+                <span className="number">{this.props.item.likes}</span>
+            </div>
+        </a>
     }
 });
 
