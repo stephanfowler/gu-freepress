@@ -73,7 +73,7 @@ var Items = React.createClass({
         return (
             <div id='items-container' onDrop={this.drop} onDragOver={this.dragOver} onDragLeave={this.dragLeave} className={this.state.isUnderDrag ? 'under-drag' : ''}>
                 {self.state.relatedItems.map(function(item) {
-                    return <Item item={item} like={self.like}/>
+                    return <Item item={item} like={self.like} isSelf={item.url === self.props.parentUrl}/>
                 })}
             </div>
         );
@@ -87,7 +87,7 @@ Item = React.createClass({
     },
 
     render: function () {
-        return <a key={this.props.item.url} className="item" href={this.props.item.url}>
+        return <a key={this.props.item.url} className={'item' + (this.props.isSelf ? ' is-self' : '')} href={this.props.item.url}>
             <div className='siteName'>{this.props.item.site_name}</div>
             <div className='image' style={{'background-image': 'url(' + this.props.item.image_url + ')'}}></div>
             <div className='title'>{this.props.item.title}</div>

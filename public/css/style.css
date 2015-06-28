@@ -1,7 +1,5 @@
 body {
-    overflow: hidden;
     margin: 0;
-
     font-family: "Guardian Egyptian Web","Guardian Text Egyptian Web",Georgia,serif;
     font-size: 16px;
     font-weight: normal;
@@ -16,7 +14,11 @@ body {
 
 body, a {
     color: rgb(51, 51, 51);
-    text-decoration: none;        
+    text-decoration: none;
+}
+
+.pageTitle {
+    font-weight: bold;
 }
 
 #items-container {
@@ -44,6 +46,14 @@ body, a {
     font-weight: bold;
     line-height:  18px;
     padding-top: 2px;
+    color: #005689;
+}
+
+.item.is-self .siteName:after {
+    content: '(this page)';
+    text-transform: none;
+    font-weight: normal;
+    margin-left: 4px;
 }
 
 .item .likes {
