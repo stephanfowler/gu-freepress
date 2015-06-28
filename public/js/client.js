@@ -36,7 +36,7 @@ var Items = React.createClass({
                 childUrl: childUrl
             },
         }).done(function (result, statusTxt, xhr) {
-            if (xhr.status === 200) {
+            if (xhr.status === 200 && result && result.items && result.items.length) {
                 self.setState({
                     relatedItems: result.items
                 });

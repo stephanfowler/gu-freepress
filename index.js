@@ -58,14 +58,18 @@ function openGraph(url) {
     });
 };
 
-function getTopics(url) {
+function getTopicFromUrl(url) {
     return db(
         items.select(items.topic)
           .from(items)
           .where(items.url.equals(url))
           .limit(1)
           .toQuery()
-    );
+    ).then(function (result) {
+        if (result.rows && result.rows[0]) {
+            return result.rows[0].topic;
+        }
+    });
 }
 
 function addItem(ogMeta, topic) {
@@ -85,12 +89,9 @@ app.get('/', function(req, res) {
     var parentUrl = req.query.parentUrl;
 
     if (parentUrl) {
-        getTopics(parentUrl)
-        .then(function (result) {
-            var topic;
-
-            if (result.rows && result.rows[0]) {
-                topic = result.rows[0].topic;
+        getTopicFromUrl(parentUrl)
+        .then(function (topic) {
+            if (topic) {
                 getTopicItems(topic).then(
                     function(result) {
                         res.render('index', { 
@@ -104,8 +105,7 @@ app.get('/', function(req, res) {
                 );
             } else {
                 res.render('index', { 
-                    parentUrl: parentUrl,
-                    items: []
+                    parentUrl: parentUrl
                 });
             }
         }); 
@@ -129,14 +129,11 @@ app.post('/api/add', urlencodedParser, function (req, res) {
     parentUrl = clean(req.body.parentUrl);
 
     if (childUrl && parentUrl) {
-        getTopics(parentUrl).then(
-            function(result) {
-                var topic,
-                    openGraphs = [openGraph(childUrl)];
+        getTopicFromUrl(parentUrl).then(
+            function(topic) {
+                var openGraphs = [openGraph(childUrl)];
 
-                if (result.rows && result.rows[0]) {
-                    topic = result.rows[0].topic;
-                } else {
+                if (!topic) {
                     topic = sha1(parentUrl);
                     openGraphs.push(openGraph(parentUrl));
                 }
