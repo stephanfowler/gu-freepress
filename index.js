@@ -29,7 +29,7 @@ function clean(url) {
 }
 
 function db(queryObj) {
-    return new Promise(function (fulfill, reject){
+    return new Promise(function (fulfill, reject) {
         pg.connect(process.env.DATABASE_URL + '?ssl=true', function(err, client, done) {
             client.query(queryObj.text, queryObj.values, function(err, result) {
                 done();
@@ -85,6 +85,26 @@ function addItem(ogMeta, topic) {
     return db(items.insert(props).toQuery());
 }
 
+function likeItem (url) {
+    return db({
+        text:'UPDATE items SET likes = likes + 1 WHERE (items.url = $1)',
+        values: [url]
+    });
+}
+
+function respondWithTopicItems(res, topic) {
+    getTopicItems(topic).then(
+        function(result) {
+            res.status(200);
+            res.send({items: result.rows});
+        },
+        function(err) {
+            res.status(304);
+            console.log('Failed fetching that topic');
+        }
+    );
+}
+
 app.get('/', function(req, res) {
     var parentUrl = req.query.parentUrl;
 
@@ -111,6 +131,25 @@ app.get('/', function(req, res) {
         }); 
     } else {
         res.send('No parentUrl query param!')
+    }
+});
+
+app.post('/api/like', urlencodedParser, function (req, res) {
+    var url = clean(req.body.url),
+        topic = clean(req.body.topic);
+
+    if (url) {
+        likeItem(url)
+        .then(
+            function (result) {
+                respondWithTopicItems(res, topic);
+            },
+            function (err) {
+                res.status(500);
+            }
+        );
+    } else {
+        res.status(400);
     }
 });
 
@@ -154,16 +193,7 @@ app.post('/api/add', urlencodedParser, function (req, res) {
                         console.log('Didn\'t add anything new');
                     })
                     .then(function() {
-                        getTopicItems(topic).then(
-                            function(result) {
-                                res.status(200);
-                                res.send({items: result.rows});
-                            },
-                            function(err) {
-                                res.status(304);
-                                console.log('Failed fetching that topic');
-                            }
-                        );
+                        respondWithTopicItems(res, topic);
                     })
                 })
             },
@@ -183,6 +213,7 @@ function getTopicItems(topic) {
         items.select(items.star())
         .from(items)
         .where(items.topic.equals(topic))
+        .order(items.likes.descending)
         .toQuery()
     );
 }
