@@ -86,7 +86,7 @@ function addItem(ogMeta, topic) {
 
     props.topic = topic;
 
-    props.likes = 1;
+    props.likes = 0;
 
     props.image_url = ogMeta.image ? ogMeta.image.url : null;
     props.image_url = _.isArray(ogMeta.image.url) ? ogMeta.image.url[0] : ogMeta.image.url;

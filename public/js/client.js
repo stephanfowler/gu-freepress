@@ -92,7 +92,7 @@ Item = React.createClass({
             <div className='image' style={{'background-image': 'url(' + this.props.item.image_url + ')'}}></div>
             <div className='title'>{this.props.item.title}</div>
             <div className='likes'onClick={this.handleClick}>
-                <span className="number">{this.props.item.likes}</span>
+                <span className="number">{this.props.item.likes || ''}</span>
             </div>
         </a>
     }
