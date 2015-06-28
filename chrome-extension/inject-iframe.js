@@ -1,6 +1,6 @@
 var 
-    domain = 'localhost:5000',
-    //domain = 'quiet-island-1381.herokuapp.com',
+    //domain = 'localhost:5000',
+    domain = 'quiet-island-1381.herokuapp.com',
     url = '//' + domain + '/?parentUrl=' + window.location.href,
     articleEl = document.querySelector('.content__secondary-column .js-mpu-ad-slot'),
     bannerAdEl = document.querySelector('.top-banner-ad-container');
