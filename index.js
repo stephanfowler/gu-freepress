@@ -29,6 +29,8 @@ function clean(url) {
 }
 
 function db(queryObj) {
+    console.log(queryObj.text)
+    console.log(queryObj.values)
     return new Promise(function (fulfill, reject) {
         pg.connect(process.env.DATABASE_URL + '?ssl=true', function(err, client, done) {
             client.query(queryObj.text, queryObj.values, function(err, result) {

@@ -13,7 +13,7 @@ html
     script.
         var FREEP = {
             parentUrl: '!{parentUrl}',
-            relatedItems: !{JSON.stringify(items).replace(/<\//g, "<\\/")}
+            relatedItems: !{JSON.stringify(items || []).replace(/<\//g, "<\\/")}
         }
 
     script(src='https://code.jquery.com/jquery-2.1.4.min.js')
