@@ -22,8 +22,6 @@ body, a {
 }
 
 #items-container {
-    min-height: 50px;
-    background: #efe;
     width: 300px;
 }
 
@@ -100,4 +98,16 @@ body, a {
     background-color: black;
     background-size: cover;
     background-position: center center;
+}
+
+.instructions {
+    font-size: 14px;
+    line-height: 16px;
+    color: #666;
+}
+
+.when-empty {
+    height: 100px;
+    border: 2px dashed #ccc;
+    margin: 10px 0;
 }

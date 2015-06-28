@@ -2,7 +2,7 @@
 var Items = React.createClass({
     getInitialState: function () {
         return {
-            relatedItems: this.props.relatedItems,
+            items: this.props.items,
             isUnderDrag: false
         }
     },
@@ -32,7 +32,7 @@ var Items = React.createClass({
         }).done(function (result, statusTxt, xhr) {
             if (refresh && xhr.status === 200 && result && result.items) {
                 self.setState({
-                    relatedItems: result.items
+                    items: result.items
                 });
             }
         }).fail(function (result) {
@@ -68,13 +68,19 @@ var Items = React.createClass({
     },
 
     render: function () {
-        var self = this;
+        var self = this,
+            items = this.state.items;
 
         return (
             <div id='items-container' onDrop={this.drop} onDragOver={this.dragOver} onDragLeave={this.dragLeave} className={this.state.isUnderDrag ? 'under-drag' : ''}>
-                {self.state.relatedItems.map(function(item) {
-                    return <Item item={item} like={self.like} isSelf={item.url === self.props.parentUrl}/>
-                })}
+                {items.length ?
+                    items.map(function(item) {
+                        return <Item item={item} like={self.like} isSelf={item.url === self.props.parentUrl}/>
+                    })
+                    :
+                    <div className='when-empty'></div>
+                }
+                <div className='instructions'>Drop articles here from other news sites, rate the best ones.</div>
             </div>
         );
     }
@@ -105,6 +111,6 @@ Item = React.createClass({
 });
 
 React.render(
-    <Items parentUrl={FREEP.parentUrl} relatedItems={FREEP.relatedItems}/>,
+    <Items parentUrl={INITIAL.parentUrl} items={INITIAL.items}/>,
     document.getElementById('app-container')
 );

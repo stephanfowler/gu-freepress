@@ -9,13 +9,13 @@ html
         input(style='width: 50%;', type='text', name='childUrl')
         input(type='submit')
 
-    div.pageTitle= 'Other Sources'
+    div.pageTitle= 'Sources'
     div(id='app-container')
 
     script.
-        var FREEP = {
+        var INITIAL = {
             parentUrl: '!{parentUrl}',
-            relatedItems: !{JSON.stringify(items || []).replace(/<\//g, "<\\/")}
+            items: !{JSON.stringify(items || []).replace(/<\//g, "<\\/")}
         }
 
     script(src='https://code.jquery.com/jquery-2.1.4.min.js')
