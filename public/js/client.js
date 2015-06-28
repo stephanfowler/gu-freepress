@@ -21,7 +21,7 @@ var Items = React.createClass({
         })
     },
 
-    apiCallAndRefresh: function (apiAction, data) {
+    api: function (apiAction, data, refresh) {
         var self = this;
 
         $.ajax({
@@ -30,7 +30,7 @@ var Items = React.createClass({
             dataType: 'json',
             data: data
         }).done(function (result, statusTxt, xhr) {
-            if (xhr.status === 200 && result && result.items) {
+            if (refresh && xhr.status === 200 && result && result.items) {
                 self.setState({
                     relatedItems: result.items
                 });
@@ -47,10 +47,10 @@ var Items = React.createClass({
         event.preventDefault();
 
         if (childUrl) {
-            this.apiCallAndRefresh('add', {
+            this.api('add', {
                 parentUrl: self.props.parentUrl,
                 childUrl: childUrl
-            });
+            }, true);
         }
 
         this.setState({
@@ -61,7 +61,7 @@ var Items = React.createClass({
     like: function (url, topic) {
         var self = this;
 
-        this.apiCallAndRefresh('like', {
+        this.api('like', {
             url: url,
             topic: topic
         });
@@ -83,13 +83,19 @@ var Items = React.createClass({
 Item = React.createClass({
     handleClick: function (event) {
         event.preventDefault();
+        this.props.item.likes += 1;
+        this.forceUpdate();
         this.props.like(this.props.item.url, this.props.item.topic);
     },
 
     render: function () {
-        return <a key={this.props.item.url} className={'item' + (this.props.isSelf ? ' is-self' : '')} href={this.props.item.url}>
+        return <a 
+                    key={this.props.item.url} 
+                    className={'item' + (this.props.isSelf ? ' is-self' : '')}
+                    href={this.props.item.url}
+                    target='_top'>
             <div className='siteName'>{this.props.item.site_name}</div>
-            <div className='image' style={{'background-image': 'url(' + this.props.item.image_url + ')'}}></div>
+            <div className='image' style={{'backgroundImage': 'url(' + this.props.item.image_url + ')'}}></div>
             <div className='title'>{this.props.item.title}</div>
             <div className='likes'onClick={this.handleClick}>
                 <span className="number">{this.props.item.likes || ''}</span>

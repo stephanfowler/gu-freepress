@@ -85,11 +85,12 @@ function addItem(ogMeta, topic) {
         }, {});
 
     props.topic = topic;
-
     props.likes = 0;
 
     props.image_url = ogMeta.image ? ogMeta.image.url : null;
     props.image_url = _.isArray(ogMeta.image.url) ? ogMeta.image.url[0] : ogMeta.image.url;
+
+    props.site_name = props.site_name.replace(/^the/, 'The');
 
     return db(items.insert(props).toQuery());
 }

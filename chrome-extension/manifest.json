@@ -1,0 +1,12 @@
+{
+  "name": "Guardian live newsdesk",
+  "description": "A mega-ticker from hell",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["http://www.theguardian.com/*", "http://m.code.dev-theguardian.com/*", "http://localhost:9000/*"],
+      "js": ["inject-iframe.js"]
+    }
+  ],
+  "manifest_version": 2
+}
