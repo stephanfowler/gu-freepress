@@ -1,5 +1,5 @@
 /*
-create table items (topic text NOT NULL, url text NOT NULL, likes INT, title text, description text, image_url text, site_name text, unique (url, topic));
+create table items (created timestamp not null default now(), topic text NOT NULL, url text NOT NULL, likes INT, title text, description text, image_url text, site_name text, unique (url, topic));
 */
 
 var express = require('express'),
@@ -15,7 +15,7 @@ var express = require('express'),
     urlencodedParser = bodyParser.urlencoded({ extended: false }),
     itemsSchema = {
         name: 'items',
-        columns: ['topic', 'url', 'likes', 'title', 'description', 'image_url', 'site_name']
+        columns: ['created', 'topic', 'url', 'likes', 'title', 'description', 'image_url', 'site_name']
     },
     items = sql.define(itemsSchema);
 
@@ -29,18 +29,20 @@ function clean(url) {
 }
 
 function db(queryObj) {
-    console.log(queryObj.text)
-    console.log(queryObj.values)
     return new Promise(function (fulfill, reject) {
         pg.connect(process.env.DATABASE_URL + '?ssl=true', function(err, client, done) {
-            client.query(queryObj.text, queryObj.values, function(err, result) {
-                done();
-                if (err) {
-                    reject(err);
-                } else {
-                    fulfill(result);
-                }
-            });
+            if (err) {
+                reject(err);
+            } else {
+                client.query(queryObj.text, queryObj.values, function(err, result) {
+                    done();
+                    if (err) {
+                        reject(err);
+                    } else {
+                        fulfill(result);
+                    }
+                });
+            }
         });
     });
 };
@@ -76,7 +78,9 @@ function getTopicFromUrl(url) {
 
 function addItem(ogMeta, topic) {
     var props = itemsSchema.columns.reduce(function(props, key) {
-            props[key] = ogMeta[key] || null;
+            if (ogMeta[key]) {
+                props[key] = ogMeta[key];
+            }
             return props;
         }, {});
 
@@ -215,7 +219,7 @@ function getTopicItems(topic) {
         items.select(items.star())
         .from(items)
         .where(items.topic.equals(topic))
-        .order(items.likes.descending)
+        .order(items.likes.descending, items.created.descending)
         .toQuery()
     );
 }
