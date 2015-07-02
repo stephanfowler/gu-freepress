@@ -1,3 +1,4 @@
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var Items = React.createClass({
     getInitialState: function () {
@@ -22,7 +23,10 @@ var Items = React.createClass({
     },
 
     api: function (apiAction, data, refresh) {
-        var self = this;
+        var self = this,
+            endState = {isLoading: false};
+
+        self.setState({isLoading: refresh});
 
         $.ajax({
             type: "POST",
@@ -30,12 +34,12 @@ var Items = React.createClass({
             dataType: 'json',
             data: data
         }).done(function (result, statusTxt, xhr) {
-            if (refresh && xhr.status === 200 && result && result.items) {
-                self.setState({
-                    items: result.items
-                });
+            if (xhr.status === 200 && result && result.items) {
+                endState.items = result.items;
             }
+            self.setState(endState);
         }).fail(function (result) {
+            self.setState(endState);
             console.log(result && result.message);
         });
     },
@@ -69,18 +73,28 @@ var Items = React.createClass({
 
     render: function () {
         var self = this,
-            items = this.state.items;
+            items = this.state.items.length ?
+                this.state.items
+                .filter(function(item) {
+                    return item.url !== self.props.parentUrl;
+                })
+                .map(function(item) {
+                    return <Item
+                        key={item.url} 
+                        item={item}
+                        like={self.like}
+                        isSelf={item.url === self.props.parentUrl}/>
+                })
+                :
+                <div key='when-empty' className='when-empty'></div>;
 
         return (
             <div id='items-container' onDrop={this.drop} onDragOver={this.dragOver} onDragLeave={this.dragLeave} className={this.state.isUnderDrag ? 'under-drag' : ''}>
-                {items.length ?
-                    items.map(function(item) {
-                        return <Item item={item} like={self.like} isSelf={item.url === self.props.parentUrl}/>
-                    })
-                    :
-                    <div className='when-empty'></div>
-                }
+                <ReactCSSTransitionGroup transitionName="animation">
+                    {items}
+                </ReactCSSTransitionGroup>
                 <div className='instructions'>Drop articles here from other news sites, rate the best ones.</div>
+                {self.state.isLoading ? <div className='is-loading'>Adding article...</div> : null}
             </div>
         );
     }
@@ -95,11 +109,9 @@ Item = React.createClass({
     },
 
     render: function () {
-        return <a 
-                    key={this.props.item.url} 
-                    className={'item' + (this.props.isSelf ? ' is-self' : '')}
-                    href={this.props.item.url}
-                    target='_top'>
+        return <a className={'item' + (this.props.isSelf ? ' is-self' : '')}
+                  href={this.props.item.url}
+                  target='_top'>
             <div className='siteName'>{this.props.item.site_name}</div>
             <div className='image' style={{'backgroundImage': 'url(' + this.props.item.image_url + ')'}}></div>
             <div className='title'>{this.props.item.title}</div>
