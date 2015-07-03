@@ -1,5 +1,3 @@
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
 var Items = React.createClass({
     getInitialState: function () {
         return {
@@ -22,11 +20,11 @@ var Items = React.createClass({
         })
     },
 
-    api: function (apiAction, data, refresh) {
+    api: function (apiAction, data, showLoading) {
         var self = this,
             endState = {isLoading: false};
 
-        self.setState({isLoading: refresh});
+        self.setState({isLoading: showLoading});
 
         $.ajax({
             type: "POST",
@@ -58,6 +56,7 @@ var Items = React.createClass({
         }
 
         this.setState({
+            zIndexDirection: 1,
             isUnderDrag: false
         })
     },
@@ -69,6 +68,10 @@ var Items = React.createClass({
             url: url,
             topic: topic
         });
+
+        this.setState({
+            zIndexDirection: -1
+        })
     },
 
     render: function () {
@@ -78,22 +81,24 @@ var Items = React.createClass({
                 .filter(function(item) {
                     return item.url !== self.props.parentUrl;
                 })
-                .map(function(item) {
+                .map(function(item, index) {
                     return <Item
-                        key={item.url} 
+                        key={item.url}
+                        index={index}
+                        zIndexDirection={self.state.zIndexDirection || 1}
                         item={item}
                         like={self.like}
                         isSelf={item.url === self.props.parentUrl}/>
                 })
                 :
-                <div key='when-empty' className='when-empty'></div>;
+                <div>
+                    <div key='when-empty' className='when-empty'></div>
+                    <div className='instructions'>Drop articles here from other news sites, rate the best ones.</div>
+                </div>;
 
         return (
             <div id='items-container' onDrop={this.drop} onDragOver={this.dragOver} onDragLeave={this.dragLeave} className={this.state.isUnderDrag ? 'under-drag' : ''}>
-                <ReactCSSTransitionGroup transitionName="animation">
-                    {items}
-                </ReactCSSTransitionGroup>
-                <div className='instructions'>Drop articles here from other news sites, rate the best ones.</div>
+                {items}
                 {self.state.isLoading ? <div className='is-loading'>Adding article...</div> : null}
             </div>
         );
@@ -110,8 +115,12 @@ Item = React.createClass({
 
     render: function () {
         return <a className={'item' + (this.props.isSelf ? ' is-self' : '')}
-                  href={this.props.item.url}
-                  target='_top'>
+                style={{
+                    top: (this.props.index * 110) + 'px',
+                    zIndex: this.props.index * this.props.zIndexDirection
+                }}
+                href={this.props.item.url}
+                target='_top'>
             <div className='siteName'>{this.props.item.site_name}</div>
             <div className='image' style={{'backgroundImage': 'url(' + this.props.item.image_url + ')'}}></div>
             <div className='title'>{this.props.item.title}</div>

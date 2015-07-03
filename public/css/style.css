@@ -22,6 +22,7 @@ body, a {
 }
 
 #items-container {
+    position: relative;
     width: 300px;
 }
 
@@ -31,12 +32,14 @@ body, a {
 
 .item {
     display: block;
-    position: relative;
+    position: absolute;
+    left: 0;
     background: #fff;
     overflow: hidden;
     border-bottom: 8px solid #fff;
     padding-top: 2px;
     height: 100px;
+    transition: top .5s ease-in;
 }
 
 .item .siteName {
@@ -112,24 +115,9 @@ body, a {
     margin: 10px 0;
 }
 
-.animation-enter {
-    opacity: 0;
-    height: 0px;
-    transition: all .3s ease-in;
-}
-
-.animation-enter.animation-enter-active {
-    opacity: 1;
-    height: 100px;
-}
-
-.animation-leave.animation-leave-active {
-  display: none;
-}
-
 .is-loading {
   position: absolute;
-  top: 58px;
+  top: 37px;
   left: 31px;
   width: 210px;
   background: rgba(255,255,255,0.9);
@@ -137,4 +125,5 @@ body, a {
   padding: 13px;
   border-radius: 10px;
   font-weight: bold;
+  z-index: 10001;
 }
