@@ -25,21 +25,22 @@ var Items = React.createClass({
 
         self.setState({alertText: alertText});
 
-        $.ajax({
-            type: "POST",
+        marmottajax({
+            method: "post",
             url: '/api/' + apiAction,
-            dataType: 'json',
-            data: data
-        }).done(function (result, statusTxt, xhr) {
-            if (xhr.status === 200 && result && result.items) {
+            json: true,
+            parameters: data
+        }).then(function (result) {
+            if (result && result.items) {
                 self.setState({
                     items: result.items
                 });
             }
+            self.clearAlert();
         })
-        .fail(function (result) {
-        })
-        .always(this.clearAlert);
+        .error(function (result) {
+            self.clearAlert();
+        });
     },
 
     clearAlert: function () {
@@ -84,11 +85,7 @@ var Items = React.createClass({
 
     render: function () {
         var self = this,
-            items = this.state.items.length ?
-                this.state.items
-                .filter(function(item) {
-                    return item.url !== self.props.parentUrl;
-                })
+            items = this.state.items
                 .map(function(item, index) {
                     return <Item
                         key={item.url}
@@ -97,25 +94,21 @@ var Items = React.createClass({
                         item={item}
                         like={self.like}
                         isSelf={item.url === self.props.parentUrl}/>
-                })
-                :
-                <div>
-                    <div key='when-empty' className='when-empty'></div>
-                    <div className='instructions'>Drop articles here from other news sites, rate the best ones.</div>
-                </div>;
+                });
 
         return (
-            <div>
+            <div className={this.state.items && this.state.items.length ? '' : 'empty'}>
                 <div className="pageTitle">
-                    Story Hoarde
-                    {self.state.alertText ? <span className='alert'> : {self.state.alertText}</span> : null}
+                    Story Horde
+                    {self.state.alertText ? <span className='alert'>{self.state.alertText}</span> : null}
                 </div>
-                <div id='items-container' 
+                <div className='instructions'>Drop related articles below. Upvote the best.</div>                
+                <div className={'items' + (this.state.isUnderDrag || self.state.alertText ? ' under-drag' : '')}
                         onDrop={this.drop}
                         onDragOver={this.dragOver}
-                        onDragLeave={this.dragLeave}
-                        className={this.state.isUnderDrag || self.state.alertText ? 'under-drag' : ''}>
+                        onDragLeave={this.dragLeave}>
                     {items}
+                    <div key='dropbox' className='dropbox'></div>
                 </div>
             </div>
         );
@@ -135,7 +128,7 @@ Item = React.createClass({
         return <div className={'item' + (this.props.item.highlight ? ' highlight' : '') + (this.props.isSelf ? ' is-self' : '')}
                 style={{
                     top: (this.props.index * 110) + 'px',
-                    zIndex: this.props.index * this.props.zIndexDirection
+                    zIndex: 1000 + this.props.index * this.props.zIndexDirection
                 }}>
             <a href={this.props.item.url} target='_top' className='siteName'>{this.props.item.site_name}</a>
             <a href={this.props.item.url} target='_top' className='image' style={{'backgroundImage': 'url(' + this.props.item.image_url + ')'}}></a>

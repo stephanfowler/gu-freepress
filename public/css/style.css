@@ -21,28 +21,26 @@ body, a {
     font-weight: bold;
 }
 
-#items-container {
-    position: relative;
-    width: 300px;
+.under-drag {
+    opacity: .75;
 }
 
-.under-drag {
-    opacity: .6;
+.items {
+    position: relative;
+    height: 660px;
 }
 
 .item {
     position: absolute;
     left: 0;
+    width: 100%;
+    max-width: 320px;
     background: #fff;
     overflow: hidden;
     border-bottom: 8px solid #fff;
     padding-top: 2px;
     height: 100px;
     transition: top .3s ease-in;
-}
-
-.item.highlight {
-    opacity: 0.5;
 }
 
 .item .siteName {
@@ -53,17 +51,26 @@ body, a {
     color: #005689;
 }
 
+.item.is-self .siteName:before {
+    content: '◄';
+    text-transform: none;
+    font-weight: normal;
+    margin-right: 4px;
+}
+
 .item.is-self .siteName:after {
     content: '(this page)';
     text-transform: none;
     font-weight: normal;
     margin-left: 4px;
+    font-size: 14px;
+    color: #999;
 }
 
 .item .likes {
     position: absolute;
     right: 0;
-    top: 4px;
+    top: 5px;
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
@@ -77,10 +84,13 @@ body, a {
     display: none;
 }
 
-.item .likes:hover,
-.item .likes:after:hover {
+.item .likes:hover {
     background: #005689;
     color: #fff;
+}
+
+.item.highlight .likes {
+    background: #e6711b;
 }
 
 .item:hover .likes:before {
@@ -88,6 +98,10 @@ body, a {
     font-weight: normal;
     font-size: 14px;
     margin-right: 4px;
+}
+
+.item.highlight .likes:before {
+    display: none;
 }
 
 .item .likes:after {
@@ -107,8 +121,7 @@ body, a {
 
 .item .image {
     position: absolute;
-    top: 26px;
-
+    top: 27px;
     width: 120px;
     height: 72px;
     position: absolute;
@@ -121,14 +134,26 @@ body, a {
     font-size: 14px;
     line-height: 16px;
     color: #666;
+    padding: 3px 0 10px;
 }
 
-.when-empty {
+.dropbox {
+    display: none;
+}
+
+.empty .dropbox {
+    display: block;
     height: 100px;
     border: 2px dashed #ccc;
     margin: 10px 0;
 }
 
-.alert {
-    color: #999;
+.under-drag .dropbox {
+    border-color: #666;
+}
 
+.alert {
+    margin-left: 4px;
+    color: #005689;
+    opacity: .75;
+}

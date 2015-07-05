@@ -4,11 +4,6 @@ html
     link(href='/css/style.css', rel='stylesheet')
 
   body
-    //form(method='post', action='/')
-        input(name='parentUrl', type='hidden', value=parentUrl)
-        input(style='width: 50%;', type='text', name='childUrl')
-        input(type='submit')
-
     div(id='app-container')
 
     script.
@@ -17,7 +12,7 @@ html
             items: !{JSON.stringify(items || []).replace(/<\//g, "<\\/")}
         }
 
-    script(src='https://code.jquery.com/jquery-2.1.4.min.js')
     script(src='https://fb.me/react-0.13.3.min.js')
     script(src='https://fb.me/JSXTransformer-0.13.3.js')
-    script(src='/js/client.js',  type='text/jsx')
+    script(src='/js/marmottajax.min.js', type='text/jsx')
+    script(src='/js/client.js', type='text/jsx')

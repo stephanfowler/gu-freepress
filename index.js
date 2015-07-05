@@ -102,14 +102,26 @@ function likeItem (url) {
     });
 }
 
+function getTopicItems(topic) {
+    return db(
+        items.select(items.star())
+        .from(items)
+        .where(items.topic.equals(topic))
+        .order(items.likes.descending, items.created.descending)
+        .toQuery()
+    );
+}
+
 function respondWithTopicItems(res, topic, stickyUrl) {
     getTopicItems(topic).then(
         function(result) {
+            var items = stickyUrl ? _.sortBy(result.rows, function(item) {
+                    return item.url !== stickyUrl;
+                }) : result.rows;
+
             res.status(200);
             res.send({
-                items: stickyUrl ? _.sortBy(result.rows, function(item) {
-                    return item.url !== stickyUrl;
-                }) : result.rows
+                items: items.slice(0, 6)
             });
         },
         function(err) {
@@ -130,7 +142,7 @@ app.get('/', function(req, res) {
                     function(result) {
                         res.render('index', { 
                             parentUrl: parentUrl,
-                            items: result.rows 
+                            items: result.rows.slice(0, 6)
                         });
                     },
                     function(err) {
@@ -194,7 +206,7 @@ app.post('/api/add', urlencodedParser, function (req, res) {
                 Promise.all(openGraphs)
                 .catch(function(err) {
                     res.status(304);
-                    console.log('Failed to find any opengraph data');
+                    res.send({err: 'Failed to find opengraph data'});
                 })
                 .then(function(ogMetas) {
                     Promise.all(
@@ -207,31 +219,21 @@ app.post('/api/add', urlencodedParser, function (req, res) {
                         respondWithTopicItems(res, topic, childUrl);
                     })
                     .then(function() {
-                        res.status(304);
+                        res.status(200);
                         respondWithTopicItems(res, topic, childUrl);
                     })
                 })
             },
             function(err) {
                 res.status(500);
-                console.log('Failed while talking to database');
+                res.send({err: 'Failed while talking to database'});
             }
         );
     } else {
         res.status(400);
-        console.log('No parentUrl and childUrl');
+        res.send({err: 'No parentUrl and childUrl'});
     }
 })
-
-function getTopicItems(topic) {
-    return db(
-        items.select(items.star())
-        .from(items)
-        .where(items.topic.equals(topic))
-        .order(items.likes.descending, items.created.descending)
-        .toQuery()
-    );
-}
 
 app.listen(app.get('port'), function() {
     console.log('Node app running on port', app.get('port'));
