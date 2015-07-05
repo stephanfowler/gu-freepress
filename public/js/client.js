@@ -20,11 +20,10 @@ var Items = React.createClass({
         })
     },
 
-    api: function (apiAction, data, showLoading) {
-        var self = this,
-            endState = {isLoading: false};
+    api: function (apiAction, data, alertText) {
+        var self = this;
 
-        self.setState({isLoading: showLoading});
+        self.setState({alertText: alertText});
 
         $.ajax({
             type: "POST",
@@ -33,13 +32,22 @@ var Items = React.createClass({
             data: data
         }).done(function (result, statusTxt, xhr) {
             if (xhr.status === 200 && result && result.items) {
-                endState.items = result.items;
+                self.setState({
+                    items: result.items
+                });
             }
-            self.setState(endState);
-        }).fail(function (result) {
-            self.setState(endState);
-            console.log(result && result.message);
-        });
+        })
+        .fail(function (result) {
+        })
+        .always(this.clearAlert);
+    },
+
+    clearAlert: function () {
+        var self = this;
+
+        setTimeout(function() {
+            self.setState({alertText: null});
+        }, 500);
     },
 
     drop: function (event) {
@@ -52,7 +60,7 @@ var Items = React.createClass({
             this.api('add', {
                 parentUrl: self.props.parentUrl,
                 childUrl: childUrl
-            }, true);
+            }, 'fetching...');
         }
 
         this.setState({
@@ -67,7 +75,7 @@ var Items = React.createClass({
         this.api('like', {
             url: url,
             topic: topic
-        });
+        }, null);
 
         this.setState({
             zIndexDirection: -1
@@ -97,9 +105,18 @@ var Items = React.createClass({
                 </div>;
 
         return (
-            <div id='items-container' onDrop={this.drop} onDragOver={this.dragOver} onDragLeave={this.dragLeave} className={this.state.isUnderDrag ? 'under-drag' : ''}>
-                {items}
-                {self.state.isLoading ? <div className='is-loading'>Adding article...</div> : null}
+            <div>
+                <div className="pageTitle">
+                    Story Hoarde
+                    {self.state.alertText ? <span className='alert'> : {self.state.alertText}</span> : null}
+                </div>
+                <div id='items-container' 
+                        onDrop={this.drop}
+                        onDragOver={this.dragOver}
+                        onDragLeave={this.dragLeave}
+                        className={this.state.isUnderDrag || self.state.alertText ? 'under-drag' : ''}>
+                    {items}
+                </div>
             </div>
         );
     }
@@ -109,25 +126,24 @@ Item = React.createClass({
     handleClick: function (event) {
         event.preventDefault();
         this.props.item.likes += 1;
+        this.props.item.highlight = true;
         this.forceUpdate();
         this.props.like(this.props.item.url, this.props.item.topic);
     },
 
     render: function () {
-        return <a className={'item' + (this.props.isSelf ? ' is-self' : '')}
+        return <div className={'item' + (this.props.item.highlight ? ' highlight' : '') + (this.props.isSelf ? ' is-self' : '')}
                 style={{
                     top: (this.props.index * 110) + 'px',
                     zIndex: this.props.index * this.props.zIndexDirection
-                }}
-                href={this.props.item.url}
-                target='_top'>
-            <div className='siteName'>{this.props.item.site_name}</div>
-            <div className='image' style={{'backgroundImage': 'url(' + this.props.item.image_url + ')'}}></div>
-            <div className='title'>{this.props.item.title}</div>
+                }}>
+            <a href={this.props.item.url} target='_top' className='siteName'>{this.props.item.site_name}</a>
+            <a href={this.props.item.url} target='_top' className='image' style={{'backgroundImage': 'url(' + this.props.item.image_url + ')'}}></a>
+            <a href={this.props.item.url} target='_top' className='title'>{this.props.item.title}</a>
             <div className='likes'onClick={this.handleClick}>
                 <span className="number">{this.props.item.likes || ''}</span>
             </div>
-        </a>
+        </div>
     }
 });
 

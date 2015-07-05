@@ -102,11 +102,15 @@ function likeItem (url) {
     });
 }
 
-function respondWithTopicItems(res, topic) {
+function respondWithTopicItems(res, topic, stickyUrl) {
     getTopicItems(topic).then(
         function(result) {
             res.status(200);
-            res.send({items: result.rows});
+            res.send({
+                items: stickyUrl ? _.sortBy(result.rows, function(item) {
+                    return item.url !== stickyUrl;
+                }) : result.rows
+            });
         },
         function(err) {
             res.status(304);
@@ -200,10 +204,11 @@ app.post('/api/add', urlencodedParser, function (req, res) {
                     )
                     .catch(function(err) {
                         res.status(304);
-                        console.log('Didn\'t add anything new');
+                        respondWithTopicItems(res, topic, childUrl);
                     })
                     .then(function() {
-                        respondWithTopicItems(res, topic);
+                        res.status(304);
+                        respondWithTopicItems(res, topic, childUrl);
                     })
                 })
             },
