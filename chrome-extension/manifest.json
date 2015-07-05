@@ -10,7 +10,8 @@
         "http://localhost:9000/*",
         "http://www.telegraph.co.uk/*",
         "http://www.buzzfeed.com/*",
-        "http://www.bbc.co.uk/*"
+        "http://www.bbc.co.uk/*",
+        "http://www.irishtimes.com/*"
       ],
       "js": ["inject-iframe.js"]
     }

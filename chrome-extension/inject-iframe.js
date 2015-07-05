@@ -29,6 +29,12 @@ var thisUrl = window.location.href,
         targetSelector: '.column--secondary',
         position: 'afterbegin',
         hideableSelector: null
+    },
+    {
+        rx: /irishtimes\.com/,
+        targetSelector: '.span4.nocontent',
+        position: 'afterbegin',
+        hideableSelector: null
     }
 
 ].forEach(function (spec) {
