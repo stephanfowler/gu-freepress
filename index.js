@@ -180,30 +180,41 @@ app.post('/api/like', urlencodedParser, function (req, res) {
 });
 
 app.post('/api/add', urlencodedParser, function (req, res) {
-    var childUrl,
-        parentUrl,
-        query;
+    var parentUrl = clean(req.body.parentUrl),
+        childUrl  = clean(req.body.childUrl),
+        specs;
 
     res.setHeader('Content-Type', 'application/json');
     
-    if (!req.body) {
-        return res.sendStatus(400);
-    }
+    if (parentUrl && childUrl) {
+        specs = [
+            {url: parentUrl, topic: getTopicFromUrl(parentUrl)},
+            {url: childUrl,  topic: getTopicFromUrl(childUrl)}
+        ];
 
-    childUrl = clean(req.body.childUrl);
-    parentUrl = clean(req.body.parentUrl);
-
-    if (childUrl && parentUrl) {
-        getTopicFromUrl(parentUrl).then(
-            function(topic) {
-                var openGraphs = [openGraph(childUrl)];
+        Promise.all(
+            _.pluck(specs, 'topic')
+        ).then(
+            function(topics) {
+                var topic = _.compact(topics)[0];
 
                 if (!topic) {
                     topic = sha1(parentUrl);
-                    openGraphs.push(openGraph(parentUrl));
                 }
 
-                Promise.all(openGraphs)
+                topics.forEach(function(topic, i) {
+                    specs[i].topic = topic; // convert promise to value
+                })
+
+                Promise.all(
+                    specs
+                    .filter(function(spec) {
+                        return !spec.topic; // only fetch OG data for urls that havent previously been registered
+                    })
+                    .map(function(spec) {
+                        return openGraph(spec.url);
+                    })                    
+                )
                 .catch(function(err) {
                     res.status(304);
                     res.send({err: 'Failed to find opengraph data'});
