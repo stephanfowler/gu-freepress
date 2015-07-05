@@ -1,10 +1,10 @@
 {
-  "name": "Guardian live newsdesk",
-  "description": "A mega-ticker from hell",
+  "name": "Guardian Free Press",
+  "description": "Crowdsourced related content",
   "version": "1.0",
   "content_scripts": [
     {
-      "matches": ["http://www.theguardian.com/*", "http://m.code.dev-theguardian.com/*", "http://localhost:9000/*"],
+      "matches": ["http://www.theguardian.com/*", "http://m.code.dev-theguardian.com/*", "http://localhost:9000/*", "http://www.telegraph.co.uk/*"],
       "js": ["inject-iframe.js"]
     }
   ],
