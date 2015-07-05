@@ -91,9 +91,12 @@ body, a {
 }
 
 .item .likes:after {
-    content: '▲';
+    content: '☆';
     margin-left: 2px;
-    opacity: .7;
+}
+
+.item .likes:hover:after {
+    content: '★';
 }
 
 .item .title {
