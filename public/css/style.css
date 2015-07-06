@@ -21,8 +21,8 @@ body, a {
     font-weight: bold;
 }
 
-.under-drag {
-    opacity: .75;
+.pending {
+    opacity: .5;
 }
 
 .items {
@@ -78,10 +78,6 @@ body, a {
     border-radius: 10px;
 }
 
-.under-drag .item .likes {
-    display: none;
-}
-
 .item:hover .likes {
     color: #005689;
 }
@@ -91,8 +87,9 @@ body, a {
     color: #fff;
 }
 
-.item.highlight .likes {
+.item.liked .likes {
     background: #e6711b;
+    color: #fff;
 }
 
 .item:hover .likes:before {
@@ -102,7 +99,7 @@ body, a {
     margin-right: 4px;
 }
 
-.item.highlight .likes:before {
+.item.liked .likes:before {
     display: none;
 }
 
@@ -150,12 +147,12 @@ body, a {
     margin: 10px 0;
 }
 
-.under-drag .dropbox {
+.pending .dropbox {
     border-color: #666;
 }
 
 .alert {
     margin-left: 4px;
-    color: #005689;
+    color: #e6711b;
     opacity: .75;
 }

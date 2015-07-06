@@ -65,7 +65,6 @@ var Items = React.createClass({
         }
 
         this.setState({
-            zIndexDirection: 1,
             isUnderDrag: false
         })
     },
@@ -77,10 +76,6 @@ var Items = React.createClass({
             url: url,
             topic: topic
         }, null);
-
-        this.setState({
-            zIndexDirection: -1
-        })
     },
 
     render: function () {
@@ -90,7 +85,6 @@ var Items = React.createClass({
                     return <Item
                         key={item.url}
                         index={index}
-                        zIndexDirection={self.state.zIndexDirection || 1}
                         item={item}
                         like={self.like}
                         isSelf={item.url === self.props.parentUrl}/>
@@ -103,7 +97,7 @@ var Items = React.createClass({
                     {self.state.alertText ? <span className='alert'>{self.state.alertText}</span> : null}
                 </div>
                 <div className='instructions'>Drop related articles below. Upvote the best.</div>                
-                <div className={'items' + (this.state.isUnderDrag || self.state.alertText ? ' under-drag' : '')}
+                <div className={'items' + (this.state.isUnderDrag ? ' pending' : '')}
                         onDrop={this.drop}
                         onDragOver={this.dragOver}
                         onDragLeave={this.dragLeave}>
@@ -116,19 +110,25 @@ var Items = React.createClass({
 })
 
 Item = React.createClass({
+    getInitialState: function () {
+        return {
+            liked: false
+        }
+    },
+
     handleClick: function (event) {
         event.preventDefault();
         this.props.item.likes += 1;
-        this.props.item.highlight = true;
+        this.state.liked = true;
         this.forceUpdate();
         this.props.like(this.props.item.url, this.props.item.topic);
     },
 
     render: function () {
-        return <div className={'item' + (this.props.item.highlight ? ' highlight' : '') + (this.props.isSelf ? ' is-self' : '')}
+        return <div className={'item' + (this.state.liked ? ' liked' : '') + (this.props.isSelf ? ' is-self' : '')}
                 style={{
                     top: (this.props.index * 110) + 'px',
-                    zIndex: 1000 + this.props.index * this.props.zIndexDirection
+                    zIndex: 1000 - this.props.index
                 }}>
             <a href={this.props.item.url} target='_top' className='siteName'>{this.props.item.site_name}</a>
             <a href={this.props.item.url} target='_top' className='image' style={{'backgroundImage': 'url(' + this.props.item.image_url + ')'}}></a>
