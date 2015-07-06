@@ -86,6 +86,7 @@ var Items = React.createClass({
                         key={item.url}
                         index={index}
                         item={item}
+                        showLikes={!self.props.asGuPopup}
                         like={self.like}
                         isSelf={item.url === self.props.parentUrl}/>
                 });
@@ -96,14 +97,23 @@ var Items = React.createClass({
                     Story Horde
                     {self.state.alertText ? <span className='alert'>{self.state.alertText}</span> : null}
                 </div>
-                <div className='instructions'>Drop related articles below. Upvote the best.</div>                
-                <div className={'items' + (this.state.isUnderDrag ? ' pending' : '')}
-                        onDrop={this.drop}
-                        onDragOver={this.dragOver}
-                        onDragLeave={this.dragLeave}>
-                    {items}
-                    <div key='dropbox' className='dropbox'></div>
-                </div>
+                {
+                    this.props.asGuPopup ?
+                    <div className='items guPopup'>
+                        {items}
+                    </div>
+                    :
+                    <div>
+                        <div className='instructions'>Drop related articles below. Upvote the best.</div>                
+                        <div className={'items' + (this.state.isUnderDrag ? ' pending' : '')}
+                                onDrop={this.drop}
+                                onDragOver={this.dragOver}
+                                onDragLeave={this.dragLeave}>
+                            {items}
+                            <div key='dropbox' className='dropbox'></div>
+                        </div>
+                    </div>
+                }
             </div>
         );
     }
@@ -133,14 +143,15 @@ Item = React.createClass({
             <a href={this.props.item.url} target='_top' className='siteName'>{this.props.item.site_name}</a>
             <a href={this.props.item.url} target='_top' className='image' style={{'backgroundImage': 'url(' + this.props.item.image_url + ')'}}></a>
             <a href={this.props.item.url} target='_top' className='title'>{this.props.item.title}</a>
-            <div className='likes'onClick={this.handleClick}>
-                <span className="number">{this.props.item.likes || ''}</span>
-            </div>
+            {this.props.showLikes ?
+                <div className='likes'onClick={this.handleClick}>
+                    <span className="number">{this.props.item.likes || ''}</span>
+                </div> : null}
         </div>
     }
 });
 
 React.render(
-    <Items parentUrl={INITIAL.parentUrl} items={INITIAL.items}/>,
+    <Items parentUrl={INITIAL.parentUrl} items={INITIAL.items} asGuPopup={INITIAL.asGuPopup}/>,
     document.getElementById('app-container')
 );

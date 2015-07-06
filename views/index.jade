@@ -8,6 +8,7 @@ html
 
     script.
         var INITIAL = {
+            asGuPopup: !{!!asGuPopup},
             parentUrl: '!{parentUrl}',
             items: !{JSON.stringify(items || []).replace(/<\//g, "<\\/")}
         }

@@ -5,13 +5,7 @@
   "content_scripts": [
     {
       "matches": [
-        "http://www.theguardian.com/*",
-        "http://m.code.dev-theguardian.com/*",
-        "http://localhost:9000/*",
-        "http://www.telegraph.co.uk/*",
-        "http://www.buzzfeed.com/*",
-        "http://www.bbc.co.uk/*",
-        "http://www.irishtimes.com/*"
+        "http://*/*"
       ],
       "js": ["inject-iframe.js"]
     }

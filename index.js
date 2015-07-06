@@ -67,7 +67,6 @@ function getTopicFromUrl(url) {
         items.select(items.topic)
           .from(items)
           .where(items.url.equals(url))
-          .limit(1)
           .toQuery()
     ).then(function (result) {
         if (result.rows && result.rows[0]) {
@@ -112,6 +111,17 @@ function getTopicItems(topic) {
     );
 }
 
+function getTopicItemsGuardian(topic) {
+    return db(
+        items.select(items.star())
+        .from(items)
+        .where(items.topic.equals(topic), items.url.like('%theguardian.com/%'))
+        .order(items.likes.descending, items.created.descending)
+        .limit(1)
+        .toQuery()
+    );
+}
+
 function respondWithTopicItems(res, topic, stickyUrl) {
     getTopicItems(topic).then(
         function(result) {
@@ -132,15 +142,18 @@ function respondWithTopicItems(res, topic, stickyUrl) {
 }
 
 app.get('/', function(req, res) {
-    var parentUrl = req.query.parentUrl;
+    var parentUrl = req.query.parentUrl,
+        asGuPopup = req.query.asGuPopup,
+        getItems  = asGuPopup ? getTopicItemsGuardian : getTopicItems;
 
     if (parentUrl) {
         getTopicFromUrl(parentUrl)
         .then(function (topic) {
             if (topic) {
-                getTopicItems(topic).then(
+                getItems(topic).then(
                     function(result) {
-                        res.render('index', { 
+                        res.render('index', {
+                            asGuPopup: asGuPopup,
                             parentUrl: parentUrl,
                             items: result.rows.slice(0, 6)
                         });
@@ -157,6 +170,33 @@ app.get('/', function(req, res) {
         }); 
     } else {
         res.send('No parentUrl query param!')
+    }
+});
+
+app.get('/api/show-popup', function(req, res) {
+    var parentUrl = req.query.parentUrl;
+
+    res.setHeader('Content-Type', 'application/json');
+    
+    if (parentUrl) {
+        getTopicFromUrl(parentUrl)
+        .then(function (topic) {
+            if (topic) {
+                getTopicItemsGuardian(topic)
+                .then(
+                    function(result) {
+                        res.send(!!result.rows[0]);
+                    },
+                    function(err) {
+                        res.send(err);
+                    }
+                );
+            } else {
+                res.send(false);
+            }
+        }); 
+    } else {
+        res.send(false);
     }
 });
 

@@ -86,6 +86,7 @@ var Items = React.createClass({displayName: "Items",
                         key: item.url, 
                         index: index, 
                         item: item, 
+                        showLikes: !self.props.asGuPopup, 
                         like: self.like, 
                         isSelf: item.url === self.props.parentUrl})
                 });
@@ -96,14 +97,23 @@ var Items = React.createClass({displayName: "Items",
                     "Story Horde", 
                     self.state.alertText ? React.createElement("span", {className: "alert"}, self.state.alertText) : null
                 ), 
-                React.createElement("div", {className: "instructions"}, "Drop related articles below. Upvote the best."), 
-                React.createElement("div", {className: 'items' + (this.state.isUnderDrag ? ' pending' : ''), 
-                        onDrop: this.drop, 
-                        onDragOver: this.dragOver, 
-                        onDragLeave: this.dragLeave}, 
-                    items, 
-                    React.createElement("div", {key: "dropbox", className: "dropbox"})
-                )
+                
+                    this.props.asGuPopup ?
+                    React.createElement("div", {className: "items guPopup"}, 
+                        items
+                    )
+                    :
+                    React.createElement("div", null, 
+                        React.createElement("div", {className: "instructions"}, "Drop related articles below. Upvote the best."), 
+                        React.createElement("div", {className: 'items' + (this.state.isUnderDrag ? ' pending' : ''), 
+                                onDrop: this.drop, 
+                                onDragOver: this.dragOver, 
+                                onDragLeave: this.dragLeave}, 
+                            items, 
+                            React.createElement("div", {key: "dropbox", className: "dropbox"})
+                        )
+                    )
+                
             )
         );
     }
@@ -133,14 +143,15 @@ Item = React.createClass({displayName: "Item",
             React.createElement("a", {href: this.props.item.url, target: "_top", className: "siteName"}, this.props.item.site_name), 
             React.createElement("a", {href: this.props.item.url, target: "_top", className: "image", style: {'backgroundImage': 'url(' + this.props.item.image_url + ')'}}), 
             React.createElement("a", {href: this.props.item.url, target: "_top", className: "title"}, this.props.item.title), 
-            React.createElement("div", {className: "likes", onClick: this.handleClick}, 
-                React.createElement("span", {className: "number"}, this.props.item.likes || '')
-            )
+            this.props.showLikes ?
+                React.createElement("div", {className: "likes", onClick: this.handleClick}, 
+                    React.createElement("span", {className: "number"}, this.props.item.likes || '')
+                ) : null
         )
     }
 });
 
 React.render(
-    React.createElement(Items, {parentUrl: INITIAL.parentUrl, items: INITIAL.items}),
+    React.createElement(Items, {parentUrl: INITIAL.parentUrl, items: INITIAL.items, asGuPopup: INITIAL.asGuPopup}),
     document.getElementById('app-container')
 );
