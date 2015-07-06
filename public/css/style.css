@@ -17,6 +17,10 @@ body, a {
     text-decoration: none;
 }
 
+#app-container {
+    max-width: 320px;
+}
+
 .pageTitle {
     font-weight: bold;
 }
@@ -34,7 +38,6 @@ body, a {
     position: absolute;
     left: 0;
     width: 100%;
-    max-width: 320px;
     background: #fff;
     overflow: hidden;
     height: 100px;
@@ -61,7 +64,6 @@ body, a {
     text-transform: none;
     font-weight: normal;
     margin-left: 4px;
-    font-size: 14px;
     color: #999;
 }
 
@@ -80,6 +82,7 @@ body, a {
 
 .item:hover .likes {
     color: #005689;
+    background: #eee;
 }
 
 .item .likes:hover {
@@ -154,5 +157,4 @@ body, a {
 .alert {
     margin-left: 4px;
     color: #e6711b;
-    opacity: .75;
 }
