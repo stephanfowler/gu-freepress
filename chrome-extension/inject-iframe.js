@@ -1,7 +1,7 @@
 var thisUrl = window.location.href, 
 
-    domain = 'localhost:5000',
-    //domain = 'quiet-island-1381.herokuapp.com',
+    //domain = 'localhost:5000',
+    domain = 'quiet-island-1381.herokuapp.com',
 
     url = '//' + domain + '/?parentUrl=' + thisUrl;
 
