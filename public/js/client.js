@@ -91,31 +91,30 @@ var Items = React.createClass({
                         isSelf={item.url === self.props.parentUrl}/>
                 });
 
-        return (
-            <div className={this.state.items && this.state.items.length ? '' : 'empty'}>
+        return this.props.asGuPopup ?
+            (<div>
+                <div className="pageTitle">
+                    See also:
+                </div>
+                <div className='items guPopup'>
+                    {items}
+                </div>
+            </div>)
+            :
+            (<div className={this.state.items && this.state.items.length ? '' : 'empty'}>
                 <div className="pageTitle">
                     Story Horde
                     {self.state.alertText ? <span className='alert'>{self.state.alertText}</span> : null}
                 </div>
-                {
-                    this.props.asGuPopup ?
-                    <div className='items guPopup'>
-                        {items}
-                    </div>
-                    :
-                    <div>
-                        <div className='instructions'>Drop related articles below. Upvote the best.</div>                
-                        <div className={'items' + (this.state.isUnderDrag ? ' pending' : '')}
-                                onDrop={this.drop}
-                                onDragOver={this.dragOver}
-                                onDragLeave={this.dragLeave}>
-                            {items}
-                            <div key='dropbox' className='dropbox'></div>
-                        </div>
-                    </div>
-                }
-            </div>
-        );
+                <div className='instructions'>Drop related articles below. Upvote the best.</div>                
+                <div className={'items' + (this.state.isUnderDrag ? ' pending' : '')}
+                        onDrop={this.drop}
+                        onDragOver={this.dragOver}
+                        onDragLeave={this.dragLeave}>
+                    {items}
+                    <div key='dropbox' className='dropbox'></div>
+                </div>
+            </div>)
     }
 })
 

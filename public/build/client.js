@@ -91,31 +91,30 @@ var Items = React.createClass({displayName: "Items",
                         isSelf: item.url === self.props.parentUrl})
                 });
 
-        return (
-            React.createElement("div", {className: this.state.items && this.state.items.length ? '' : 'empty'}, 
+        return this.props.asGuPopup ?
+            (React.createElement("div", null, 
+                React.createElement("div", {className: "pageTitle"}, 
+                    "See also:"
+                ), 
+                React.createElement("div", {className: "items guPopup"}, 
+                    items
+                )
+            ))
+            :
+            (React.createElement("div", {className: this.state.items && this.state.items.length ? '' : 'empty'}, 
                 React.createElement("div", {className: "pageTitle"}, 
                     "Story Horde", 
                     self.state.alertText ? React.createElement("span", {className: "alert"}, self.state.alertText) : null
                 ), 
-                
-                    this.props.asGuPopup ?
-                    React.createElement("div", {className: "items guPopup"}, 
-                        items
-                    )
-                    :
-                    React.createElement("div", null, 
-                        React.createElement("div", {className: "instructions"}, "Drop related articles below. Upvote the best."), 
-                        React.createElement("div", {className: 'items' + (this.state.isUnderDrag ? ' pending' : ''), 
-                                onDrop: this.drop, 
-                                onDragOver: this.dragOver, 
-                                onDragLeave: this.dragLeave}, 
-                            items, 
-                            React.createElement("div", {key: "dropbox", className: "dropbox"})
-                        )
-                    )
-                
-            )
-        );
+                React.createElement("div", {className: "instructions"}, "Drop related articles below. Upvote the best."), 
+                React.createElement("div", {className: 'items' + (this.state.isUnderDrag ? ' pending' : ''), 
+                        onDrop: this.drop, 
+                        onDragOver: this.dragOver, 
+                        onDragLeave: this.dragLeave}, 
+                    items, 
+                    React.createElement("div", {key: "dropbox", className: "dropbox"})
+                )
+            ))
     }
 })
 

@@ -1,0 +1,20 @@
+{
+  "name": "Guardian Free Press",
+  "description": "Crowdsourced related content",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://www.theguardian.com/*",
+        "http://m.code.dev-theguardian.com/*",
+        "http://localhost:9000/*",
+        "http://www.telegraph.co.uk/*",
+        "http://www.buzzfeed.com/*",
+        "http://www.bbc.co.uk/*",
+        "http://www.irishtimes.com/*"
+      ],
+      "js": ["inject-iframe.js"]
+    }
+  ],
+  "manifest_version": 2
+}
