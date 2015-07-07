@@ -37,11 +37,11 @@ if (isGuPage) {
                             'border: 0;' +
                             'background: #fff;' +
                             'padding: 10px;' +
-                            'box-shadow: 0px 0px 35px black;' +
+                            'box-shadow: 0px 0px 40px black;' +
                             'z-index: 50000;' +
                             'position: fixed;' +
-                            'top: 20px;' +
-                            'right: 20px;' +
+                            'top: 0;' +
+                            'right: 0;' +
                             'height: 120px;' +
                             'overflow: hidden;' +
                         '"></iframe>' +
@@ -49,8 +49,8 @@ if (isGuPage) {
                             'box-sizing: border-box;' +
                             'z-index: 50001;' +
                             'position: fixed;' +
-                            'top: 30px;' +
-                            'right: 30px;' +
+                            'top: 13px;' +
+                            'right: 10px;' +
                             'cursor: pointer;' +
                             'font-size: 14px;' +
                             'font-family: monospace;' +
