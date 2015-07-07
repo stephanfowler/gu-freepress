@@ -18,12 +18,12 @@ var thisUrl = window.location.href,
 if (isGuPage) {
     targetEl = document.querySelector('.content__secondary-column .js-mpu-ad-slot');
     hideableEl = document.querySelector('.top-banner-ad-container');
-    if (hideableEl) { hideableEl.parentNode.removeChild(hideableEl); }
-    if (targetEl) { targetEl.insertAdjacentHTML('beforebegin', iframeEmbedHtml)}
+    if (hideableEl) hideableEl.parentNode.removeChild(hideableEl);
+    if (targetEl) targetEl.insertAdjacentHTML('beforebegin', iframeEmbedHtml);
 
 } else if (isBBCPage) {
     targetEl = document.querySelector('.column--secondary');
-    if (targetEl) { targetEl.insertAdjacentHTML('afterbegin', iframeEmbedHtml)}
+    if (targetEl) targetEl.insertAdjacentHTML('afterbegin', iframeEmbedHtml);
 
 } else {
     var xhr = new XMLHttpRequest();
@@ -63,11 +63,6 @@ if (isGuPage) {
                         '">&times;</a>' +
                     '</div>'
                 );
-                function removePopup() {
-                    var el = document.querySelector('#guPopup');
-
-                    el.parentNode.removeChild(el);
-                }
             }
         }
     }
