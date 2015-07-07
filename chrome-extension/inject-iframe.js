@@ -1,13 +1,14 @@
 var thisUrl = window.location.href, 
 
-    //domain = 'localhost:5000',
-    domain = 'quiet-island-1381.herokuapp.com',
+    domain = 'localhost:5000',
+    //domain = 'quiet-island-1381.herokuapp.com',
 
     isGuPage   = thisUrl.match(/theguardian\.com|localhost/),
     isBBCPage   = thisUrl.match(/bbc\.co\.uk/),
     isOtherPage = !isGuPage && !isBBCPage,
+    title = isGuPage ? 'Guardian' : isBBCPage ? 'BBC' : '',
 
-    iframeSrc  = 'http://' + domain + '/?asGuPopup=' + (isOtherPage ? '1' : '') + '&parentUrl=' + thisUrl,
+    iframeSrc  = 'http://' + domain + '/?asGuPopup=' + (isOtherPage ? '1' : '') + '&title=' + title + '&parentUrl=' + thisUrl,
     iframeEmbedHtml = '<iframe src="' + iframeSrc + '" style="border: 0; display: block; height:720px; overflow:hidden; background:#fff;"></iframe>',
 
     popupCheckUrl = 'http://' + domain + '/api/show-popup?parentUrl=' + thisUrl,
@@ -28,7 +29,7 @@ if (isGuPage) {
 } else {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
+        if (xhr.readyState === 4) {
             if (xhr.responseText === 'true') {
                 document.body.insertAdjacentHTML('beforeend', 
                     '<div id="guPopup">' +

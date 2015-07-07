@@ -143,6 +143,7 @@ function respondWithTopicItems(res, topic, stickyUrl) {
 
 app.get('/', function(req, res) {
     var parentUrl = req.query.parentUrl,
+        title = req.query.title,
         asGuPopup = req.query.asGuPopup,
         getItems  = asGuPopup ? getTopicItemsGuardian : getTopicItems;
 
@@ -153,6 +154,7 @@ app.get('/', function(req, res) {
                 getItems(topic).then(
                     function(result) {
                         res.render('index', {
+                            title: title,
                             asGuPopup: asGuPopup,
                             parentUrl: parentUrl,
                             items: result.rows.slice(0, 6)

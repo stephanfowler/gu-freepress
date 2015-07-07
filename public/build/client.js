@@ -93,9 +93,7 @@ var Items = React.createClass({displayName: "Items",
 
         return this.props.asGuPopup ?
             (React.createElement("div", null, 
-                React.createElement("div", {className: "pageTitle"}, 
-                    "See also:"
-                ), 
+                React.createElement("div", {className: "pageTitle"}, "Recommended by Free Press"), 
                 React.createElement("div", {className: "items guPopup"}, 
                     items
                 )
@@ -103,7 +101,7 @@ var Items = React.createClass({displayName: "Items",
             :
             (React.createElement("div", {className: this.state.items && this.state.items.length ? '' : 'empty'}, 
                 React.createElement("div", {className: "pageTitle"}, 
-                    "Story Horde", 
+                    this.props.title + ' Free Press', 
                     self.state.alertText ? React.createElement("span", {className: "alert"}, self.state.alertText) : null
                 ), 
                 React.createElement("div", {className: "instructions"}, "Drop related articles below. Upvote the best."), 
@@ -151,6 +149,10 @@ Item = React.createClass({displayName: "Item",
 });
 
 React.render(
-    React.createElement(Items, {parentUrl: INITIAL.parentUrl, items: INITIAL.items, asGuPopup: INITIAL.asGuPopup}),
+    React.createElement(Items, {
+        parentUrl: INITIAL.parentUrl, 
+        items: INITIAL.items, 
+        title: INITIAL.title, 
+        asGuPopup: INITIAL.asGuPopup}),
     document.getElementById('app-container')
 );
