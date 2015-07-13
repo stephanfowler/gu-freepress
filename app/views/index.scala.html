@@ -1,3 +1,5 @@
+@(relations: List[graph.Relations])
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +10,25 @@
 
 <div>
   <h1>GU Free Press</h1>
+
+  <form action='/associateFormPost' method='post'>
+    <label>Article One</label>
+    <input name='from' value=''>
+    <label>Article Two</label>
+    <input name='to' value=''>
+    <input type='submit' value='Submit' />
+  </form>
+
+  <section>
+    @relations.map { relation =>
+      <h2>@relation.article.id</h2>
+      @relation.relations.map { article =>
+        <div>
+          @article.id
+        </div>
+      }
+    }
+  </section>
 </div>
 
 </body>
