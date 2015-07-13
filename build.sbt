@@ -4,10 +4,14 @@ version := "0.1"
 
 scalaVersion := "2.11.6"
 
-resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
+resolvers ++= Seq(
+  "anormcypher" at "http://repo.anormcypher.org/",
+  "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
+)
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play" % "2.3.6"
+  "com.typesafe.play" %% "play" % "2.3.6",
+  "org.anormcypher" %% "anormcypher" % "0.6.0"
 )
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
