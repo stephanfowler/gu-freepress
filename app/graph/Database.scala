@@ -26,7 +26,7 @@ object Database {
       """
         |MERGE (from {id:{from}})
         |MERGE (to {id:{to}})
-        |MERGE p=(from)-[:related]-(to)
+        |MERGE p=(from)-[:related]->(to)
         |RETURN p
       """.stripMargin)
     .on(
