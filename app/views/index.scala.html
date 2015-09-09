@@ -22,9 +22,11 @@
   <section>
     @relations.map { relation =>
       <h2>@relation.article.id</h2>
+      <h3>@relation.article.title</h3>
       @relation.relations.map { article =>
         <div>
-          @article.id
+          <div>@article.id</div>
+          <div>@article.title</div>
         </div>
       }
     }
