@@ -10,7 +10,12 @@ import play.api.mvc._
 
 import scala.util.Try
 
-case class Node(id: String) //Shape, Image
+case class Node(
+  id: String,
+  title: Option[String] = None,
+  shape: String = "circularImage",
+  image: Option[String] = None)
+
 case class Edge(from: String, to: String)
 
 object Node {
@@ -99,14 +104,10 @@ object Application extends Controller {
     val maybeRelations = Database.relations(id)
     maybeRelations match {
       case Some(relations) =>
-        val nodes: List[Node] = relations.relations.map(r => Node(r.id)) :+ Node(relations.article.id)
+        val nodes: List[Node] = relations.relations.map(r => Node(r.id, title=r.title, image=r.image)) :+ Node(relations.article.id, title=relations.article.title, image=relations.article.image)
         val edges: List[Edge] = relations.relations.map(r => Edge(relations.article.id, r.id))
 
-        val json = Json.obj(
-          "nodes" -> nodes,
-          "edges" -> edges)
-
-        Ok(Json.prettyPrint(json)).as("application/json")
+        Ok(views.html.nodeGraph(nodes, edges))
       case _ => InternalServerError
     }
   }
