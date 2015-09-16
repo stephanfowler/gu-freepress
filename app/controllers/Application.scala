@@ -5,7 +5,7 @@ import java.net.URL
 import graph.Database
 import model.Basic
 import opengraph.FreePressOpenGraph
-import play.api.libs.json.{JsError, JsSuccess, Json}
+import play.api.libs.json.{JsResult, JsError, JsSuccess, Json}
 import play.api.mvc._
 
 import scala.util.Try
@@ -28,6 +28,12 @@ object Application extends Controller {
       .map(u => s"${u.getProtocol}://${u.getHost}${u.getPath}")
       .toOption
 
+  private def normaliseAssociationUrls(assoc: Association): Option[Association] =
+    for {
+      from <- normaliseUrl(assoc.from)
+      to <- normaliseUrl(assoc.to)
+    } yield Association(from, to, assoc.weight)
+
   def associateFormPost = Action { request =>
     val maybeAssociation: Option[Association] = for {
       form <- request.body.asFormUrlEncoded
@@ -48,7 +54,13 @@ object Application extends Controller {
   }
 
   def associate = Action { request =>
-    request.body.asJson.map(_.validate[Association]) match {
+    val maybeNormalisedAssociation: Option[JsResult[Association]] = request.body.asJson
+      .map(_.validate[Association])
+      .map(_.flatMap(assoc =>
+        normaliseAssociationUrls(assoc)
+          .fold[JsResult[Association]](JsError("Could not normalise Urls"))(JsSuccess(_))))
+
+    maybeNormalisedAssociation match {
       case Some(JsSuccess(assoc, _)) =>
         val maybeValidAssociation: Option[ValidAssociation] = checkAssociation(assoc)
 
