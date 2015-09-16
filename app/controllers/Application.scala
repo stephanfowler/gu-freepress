@@ -10,6 +10,17 @@ import play.api.mvc._
 
 import scala.util.Try
 
+case class Node(id: String) //Shape, Image
+case class Edge(from: String, to: String)
+
+object Node {
+  implicit val nodeFormat = Json.format[Node]
+}
+
+object Edge {
+  implicit val edgeFormat = Json.format[Edge]
+}
+
 case class Association(from: String, to: String, weight: Option[Long])
 
 object Association {
@@ -80,6 +91,22 @@ object Application extends Controller {
     val maybeRelations = Database.relations(id)
     maybeRelations match {
       case Some(relations) => Ok(Json.toJson(relations)).as("application/json")
+      case _ => InternalServerError
+    }
+  }
+
+  def nodesAndEdgesFor(id: String) = Action { request =>
+    val maybeRelations = Database.relations(id)
+    maybeRelations match {
+      case Some(relations) =>
+        val nodes: List[Node] = relations.relations.map(r => Node(r.id)) :+ Node(relations.article.id)
+        val edges: List[Edge] = relations.relations.map(r => Edge(relations.article.id, r.id))
+
+        val json = Json.obj(
+          "nodes" -> nodes,
+          "edges" -> edges)
+
+        Ok(Json.prettyPrint(json)).as("application/json")
       case _ => InternalServerError
     }
   }
