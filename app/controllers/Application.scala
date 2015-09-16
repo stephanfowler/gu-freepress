@@ -112,6 +112,19 @@ object Application extends Controller {
     }
   }
 
+  def nodesAndEdgesForJson(id: String) = Action { request =>
+    val maybeRelations = Database.relations(id)
+    maybeRelations match {
+      case Some(relations) =>
+        val nodes: List[Node] = relations.relations.map(r => Node(r.id, title=r.title, image=r.image)) :+ Node(relations.article.id, title=relations.article.title, image=relations.article.image)
+        val edges: List[Edge] = relations.relations.map(r => Edge(relations.article.id, r.id))
+
+
+        Ok(Json.obj("nodes" -> nodes, "edges" -> edges)).as("application/json")
+      case _ => InternalServerError
+    }
+  }
+
   private def checkAssociation(assoc: Association): Option[ValidAssociation] =
     FreePressOpenGraph.getTwo(assoc.from, assoc.to)
       .map{ case (from: Basic, to: Basic) => ValidAssociation(from, to, assoc.weight)}

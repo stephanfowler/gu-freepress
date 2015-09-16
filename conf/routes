@@ -5,4 +5,5 @@ GET        /relations/*id       controllers.Application.relations(id)
 POST       /associateFormPost   controllers.Application.associateFormPost
 POST       /associate           controllers.Application.associate
 
+GET        /nodes/json/*id      controllers.Application.nodesAndEdgesForJson(id)
 GET        /nodes/*id           controllers.Application.nodesAndEdgesFor(id)

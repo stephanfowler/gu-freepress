@@ -68,7 +68,11 @@
       network.on('selectNode', function(properties) {
         var url = properties.nodes[0];
         if (url) {
-          window.location.href = "http://localhost:9000/nodes/" + url;
+          fetch("http://localhost:9000/nodes/json/" + url, {headers: {'Content-Type': 'application/json'}}).then(function(r){
+            r.json( ).then(function(json) {
+              network.setData(json);
+            });
+          });
         }
       });
     }
