@@ -1,0 +1,84 @@
+@(nodes: List[Node], edges: List[Edge])
+
+@import play.api.libs.json.Json
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GU Free Press</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.8.2/vis.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.8.2/vis.min.css">
+    <style type="text/css">
+      body {
+        font: 10pt arial;
+        margin: 0;
+        padding: 0;
+      }
+      #mynetwork {
+        width: 100vw;
+        height: 100vh;
+        border: 1px solid lightgray;
+        background-color:#333333;
+      }
+    </style>
+    <script type="text/javascript">
+    var DIR = 'img/soft-scraps-icons/';
+
+    var nodes = null;
+    var edges = null;
+    var network = null;
+
+    // Called when the Visualization API is loaded.
+    function draw() {
+    // create people.
+    // value corresponds with the age of the person
+    var DIR = '../img/indonesia/';
+    nodes = @Html(Json.stringify(Json.toJson(nodes)));
+
+    // create connections between people
+    // value corresponds with the amount of contact between two people
+    edges = @Html(Json.stringify(Json.toJson(edges)));
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+    var data = {
+      nodes: nodes,
+      edges: edges
+    };
+    var options = {
+      nodes: {
+        borderWidth:4,
+        size:30,
+        color: {
+          border: '#222222',
+          background: '#666666'
+        },
+        font:{
+          color:'#eeeeee'
+        }
+      },
+      edges: {
+        color: 'lightgray'
+      }
+    };
+    network = new vis.Network(container, data, options);
+
+      network.on('selectNode', function(properties) {
+        var url = properties.nodes[0];
+        if (url) {
+          window.location.href = "http://localhost:9000/nodes/" + url;
+        }
+      });
+    }
+    </script>
+<body onload="draw()">
+
+  <div class="main-container">
+    <div id="mynetwork"></div>
+
+  </div>
+
+</body>
+</html>
