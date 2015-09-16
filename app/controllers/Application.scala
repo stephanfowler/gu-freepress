@@ -1,10 +1,14 @@
 package controllers
 
+import java.net.URL
+
 import graph.Database
-import model.{Basic, OpenGraphElement}
+import model.Basic
 import opengraph.FreePressOpenGraph
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.mvc._
+
+import scala.util.Try
 
 case class Association(from: String, to: String, weight: Option[Long])
 
@@ -19,11 +23,16 @@ object Application extends Controller {
 
   def index = Action { Ok(views.html.index(Database.allRelations) ) }
 
+  private def normaliseUrl(url: String): Option[String] =
+    Try(new URL(url))
+      .map(u => s"${u.getProtocol}://${u.getHost}${u.getPath}")
+      .toOption
+
   def associateFormPost = Action { request =>
     val maybeAssociation: Option[Association] = for {
       form <- request.body.asFormUrlEncoded
-      from <- form.get("from").map(_.mkString)
-      to <- form.get("to").map(_.mkString)
+      from <- form.get("from").map(_.mkString).flatMap(normaliseUrl)
+      to <- form.get("to").map(_.mkString).flatMap(normaliseUrl)
     } yield Association(from, to, None)
 
     val maybeValidAssociation: Option[(Association, ValidAssociation)] =
