@@ -1,26 +1,35 @@
+console.log('Free Press: running');
+
 var thisUrl = window.location.href, 
 
+    domain = 'https://quiet-island-1381.herokuapp.com',
     //domain = 'localhost:5000',
-    domain = 'quiet-island-1381.herokuapp.com',
 
     isGuPage   = thisUrl.match(/theguardian\.com|localhost/),
     isBBCPage   = thisUrl.match(/bbc\.co\.uk/),
     isOtherPage = !isGuPage && !isBBCPage,
     title = isGuPage ? 'Guardian' : isBBCPage ? 'BBC' : '',
 
-    iframeSrc  = 'http://' + domain + '/?asGuPopup=' + (isOtherPage ? '1' : '') + '&title=' + title + '&parentUrl=' + thisUrl,
+    iframeSrc  = domain + '/?asGuPopup=' + (isOtherPage ? '1' : '') + '&title=' + title + '&parentUrl=' + thisUrl,
     iframeEmbedHtml = '<iframe src="' + iframeSrc + '" style="border: 0; display: block; height:720px; overflow:hidden; background:#fff;"></iframe>',
 
-    popupCheckUrl = 'http://' + domain + '/api/show-popup?parentUrl=' + thisUrl,
+    popupCheckUrl = domain + '/api/show-popup?parentUrl=' + thisUrl,
 
     targetEl,
     hideableEl;
 
 if (isGuPage) {
-    targetEl = document.querySelector('.content__secondary-column .js-mpu-ad-slot');
+    targetEl = document.querySelector('.js-secondary-column .js-ad-slot-container');
     hideableEl = document.querySelector('.top-banner-ad-container');
-    if (hideableEl) hideableEl.parentNode.removeChild(hideableEl);
-    if (targetEl) targetEl.insertAdjacentHTML('beforebegin', iframeEmbedHtml);
+
+    if (targetEl) {
+        targetEl.insertAdjacentHTML('beforebegin', iframeEmbedHtml);
+        if (hideableEl) {
+            hideableEl.parentNode.removeChild(hideableEl);
+        }
+    } else {
+        console.log("Free Press: target container not found!");  
+    }
 
 } else if (isBBCPage) {
     targetEl = document.querySelector('.column--secondary');
