@@ -46,9 +46,9 @@ if (isGuPage) {
                             'border: 0;' +
                             'background: #fff;' +
                             'padding: 10px;' +
-                            'box-shadow: 0px 0px 40px black;' +
+                            'box-shadow: 0px 0px 20px #999;' +
                             'z-index: 50000;' +
-                            'position: fixed;' +
+                            'position: absolute;' +
                             'top: 0;' +
                             'right: 0;' +
                             'height: 160px;' +
@@ -57,7 +57,7 @@ if (isGuPage) {
                         '<a onClick="el = document.querySelector(\'#guPopup\');el.parentNode.removeChild(el);" style="' +
                             'box-sizing: border-box;' +
                             'z-index: 50001;' +
-                            'position: fixed;' +
+                            'position: absolute;' +
                             'top: 13px;' +
                             'right: 10px;' +
                             'cursor: pointer;' +
