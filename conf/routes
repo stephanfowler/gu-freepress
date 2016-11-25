@@ -1,0 +1,6 @@
+GET        /assets/*file        controllers.Assets.at(path="/public", file)
+GET        /                    controllers.Application.index
+
+GET        /relations/*id       controllers.Application.relations(id)
+POST       /associateFormPost   controllers.Application.associateFormPost
+POST       /associate           controllers.Application.associate

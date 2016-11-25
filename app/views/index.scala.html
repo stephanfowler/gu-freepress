@@ -1,0 +1,35 @@
+@(relations: List[graph.Relations])
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GU Free Press</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+<body>
+
+<div>
+  <h1>GU Free Press</h1>
+
+  <form action='/associateFormPost' method='post'>
+    <label>Article One</label>
+    <input name='from' value=''>
+    <label>Article Two</label>
+    <input name='to' value=''>
+    <input type='submit' value='Submit' />
+  </form>
+
+  <section>
+    @relations.map { relation =>
+      <h2>@relation.article.id</h2>
+      @relation.relations.map { article =>
+        <div>
+          @article.id
+        </div>
+      }
+    }
+  </section>
+</div>
+
+</body>
+</html>
