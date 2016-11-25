@@ -51,7 +51,7 @@ if (isGuPage) {
                             'position: fixed;' +
                             'top: 0;' +
                             'right: 0;' +
-                            'height: 120px;' +
+                            'height: 160px;' +
                             'overflow: hidden;' +
                         '"></iframe>' +
                         '<a onClick="el = document.querySelector(\'#guPopup\');el.parentNode.removeChild(el);" style="' +
