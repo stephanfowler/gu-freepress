@@ -145,8 +145,7 @@ app.get('/', function(req, res) {
     var parentUrl = req.query.parentUrl,
         title = req.query.title,
         asGuPopup = req.query.asGuPopup,
-        //getItems  = asGuPopup ? getTopicItemsGuardian : getTopicItems;
-        getItems  = getTopicItems;
+        getItems  = asGuPopup ? getTopicItemsGuardian : getTopicItems;
 
     if (parentUrl) {
         getTopicFromUrl(parentUrl)
