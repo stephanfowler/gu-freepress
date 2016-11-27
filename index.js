@@ -111,11 +111,11 @@ function getTopicItems(topic) {
     );
 }
 
-function getTopicItemsGuardian(topic) {
+function getRecommendedTopicItem(topic) {
     return db(
         items.select(items.star())
         .from(items)
-        .where(items.topic.equals(topic), items.url.like('%theguardian.com/%'))
+        //.where(items.topic.equals(topic), items.url.like('%theguardian.com/%'))
         .order(items.likes.descending, items.created.descending)
         .limit(1)
         .toQuery()
@@ -145,7 +145,7 @@ app.get('/', function(req, res) {
     var parentUrl = req.query.parentUrl,
         title = req.query.title,
         asGuPopup = req.query.asGuPopup,
-        getItems  = asGuPopup ? getTopicItemsGuardian : getTopicItems;
+        getItems  = asGuPopup ? getRecommendedTopicItem : getTopicItems;
 
     if (parentUrl) {
         getTopicFromUrl(parentUrl)
@@ -185,7 +185,7 @@ app.get('/api/show-popup', function(req, res) {
         getTopicFromUrl(parentUrl)
         .then(function (topic) {
             if (topic) {
-                getTopicItemsGuardian(topic)
+                getRecommendedTopicItem(topic)
                 .then(
                     function(result) {
                         res.send(!!result.rows[0]);
