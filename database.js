@@ -68,8 +68,8 @@ function associate(parentUrl, childUrl) {
 function getRelationsQuery(parentUrl) {
     return session
         .run("" +
-        "MATCH (article { url:{id} })-[edge:related]-(relation)" +
-        "RETURN article, edge, relation " +
+        "MATCH (parent { url:{id} })-[edge:related]-(child)" +
+        "RETURN parent, edge, child " +
         "ORDER BY edge.likes DESC;", {id: parentUrl});
 }
 
@@ -82,16 +82,16 @@ function getRelations(parentUrl) {
             for (i = 0; i < result.records.length; i++) {
                 var record = result.records[i];
                 if (!parent) {
-                    parent = record.get("article").properties;
+                    parent = record.get("parent").properties;
                 }
                 var edge = record.get("edge");
-                var relation = record.get("relation");
+                var child = record.get("child");
 
-                var relationWithLikesFromEdge = _.merge(
-                    relation.properties,
+                var childWithLikesFromEdge = _.merge(
+                    child.properties,
                     {likes: edge.properties.likes.toInt()});
 
-                records.push(relationWithLikesFromEdge)
+                records.push(childWithLikesFromEdge)
             }
 
             var deduplicatedRecords = _.uniq(records, 'url');
