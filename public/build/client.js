@@ -81,7 +81,7 @@ var Items = React.createClass({
 
     render: function () {
         var self = this,
-            items = this.state.items.filter(item => item.url !== self.props.parentUrl).map(function (item, index) {
+            items = this.state.items.map(function (item, index) {
             return React.createElement(Item, {
                 key: item.url,
                 index: index,
@@ -91,20 +91,7 @@ var Items = React.createClass({
                 isSelf: item.url === self.props.parentUrl });
         });
 
-        return this.props.asGuPopup ? React.createElement(
-            "div",
-            null,
-            React.createElement(
-                "div",
-                { className: "pageTitle" },
-                "Recommended by Open Bubble"
-            ),
-            React.createElement(
-                "div",
-                { className: "items guPopup" },
-                items
-            )
-        ) : React.createElement(
+        return React.createElement(
             "div",
             { className: "app-container-wrapper" + (this.state.items && this.state.items.length ? '' : ' empty') },
             React.createElement(

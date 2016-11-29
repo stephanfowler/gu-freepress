@@ -10,22 +10,26 @@ body {
     cursor: pointer;
     display: -webkit-box;
     padding: 10px;
+    min-width: 300px;
 }
 
 body, a {
     color: rgb(51, 51, 51);
     text-decoration: none;
 }
+.app-container-wrapper > * {
+    transition: opacity 75ms
+}
 
-@media (max-width: 40px) {
-    .app-container-wrapper *:not(.itemsCount) {
-        display: none
+@media (max-width: 300px) {
+    .app-container-wrapper > *:not(.itemsCount) {
+        opacity: 0;
     }
 }
 
-@media (min-width: 40px) {
+@media (min-width: 300px) {
     .itemsCount {
-        display: none
+        opacity: 0;
     }
 }
 
@@ -43,7 +47,6 @@ body, a {
 
 .items {
     position: relative;
-    height: 660px;
 }
 
 .itemsCount,

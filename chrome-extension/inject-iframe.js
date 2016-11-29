@@ -3,7 +3,7 @@ console.log('Free Press: running');
 var thisUrl = window.location.href, 
 
     domain = 'https://quiet-island-1381.herokuapp.com',
-    //domain = 'http://localhost:5000',
+    domain = 'http://localhost:5000',
     iframeSrc  = domain + '/?parentUrl=' + thisUrl;
 
 document.body.insertAdjacentHTML('beforeend', 
@@ -11,21 +11,24 @@ document.body.insertAdjacentHTML('beforeend',
         #bubbleSideBar {
             position: fixed;
             top: 0;
-            bottom: 0;
+            height: 100%;
             right: 0;
             width: 320px;
             background-color: white;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
             z-index: 2147483647;
             overflow: hidden;
-            border-bottom-left-radius: 15px;
-            border-top-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            border-bottom-right-radius: 0;
+            transition: all 150ms;
         }
         #bubbleSideBar.closed {
             height: 35px;
             width: 37px;
+            border-bottom-left-radius: 15px;
+            border-top-left-radius: 15px;
+            border-bottom-right-radius: 15px;
         }
         #bubbleToggle {
             height: 32px;
