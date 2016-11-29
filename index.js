@@ -143,16 +143,12 @@ function respondWithTopicItems(res, topic, stickyUrl) {
 }
 
 app.get('/', function(req, res) {
-    var parentUrl = req.query.parentUrl,
-        title = req.query.title,
-        asGuPopup = req.query.asGuPopup;
+    var parentUrl = req.query.parentUrl;
 
     if (parentUrl) {
         database.getRelations(parentUrl)
         .then(function (relations) {
                         res.render('index', {
-                            title: title,
-                            asGuPopup: asGuPopup,
                             parentUrl: parentUrl,
                             items: relations.items
                         });
@@ -163,33 +159,6 @@ app.get('/', function(req, res) {
     }
 });
 
-app.get('/api/show-popup', function(req, res) {
-    var parentUrl = req.query.parentUrl;
-
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200);
-    
-    if (parentUrl) {
-        getTopicFromUrl(parentUrl)
-        .then(function (topic) {
-            if (topic) {
-                getTopicItemsGuardian(topic)
-                .then(
-                    function(result) {
-                        res.send(!!result.rows[0]);
-                    },
-                    function(err) {
-                        res.send(err);
-                    }
-                );
-            } else {
-                res.send(false);
-            }
-        }); 
-    } else {
-        res.send(false);
-    }
-});
 
 app.post('/api/like', urlencodedParser, function (req, res) {
     var parentUrl = clean(req.body.parentUrl),
