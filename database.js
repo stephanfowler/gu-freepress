@@ -69,7 +69,8 @@ function getRelationsQuery(parentUrl) {
     return session
         .run("" +
         "MATCH (article { url:{id} })-[edge:related]-(relation)" +
-        "RETURN article, edge, relation;", {id: parentUrl});
+        "RETURN article, edge, relation " +
+        "ORDER BY edge.likes DESC;", {id: parentUrl});
 }
 
 function getRelations(parentUrl) {
