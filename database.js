@@ -93,8 +93,9 @@ function getRelations(parentUrl) {
                 records.push(relationWithLikesFromEdge)
             }
 
-            return _.merge(parent,
-                {items: records});
+            var deduplicatedRecords = _.uniq(records, 'url');
+
+            return _.merge(parent, {items: deduplicatedRecords});
         });
 }
 
