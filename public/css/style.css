@@ -190,7 +190,7 @@ body, a {
     display: block;
     height: 100px;
     border: 2px dashed #ccc;
-    margin: 10px 0;
+    margin: 10px;
 }
 
 .pending .dropbox {
