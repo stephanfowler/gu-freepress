@@ -59,8 +59,8 @@ function associate(parentUrl, childUrl) {
             "to.title={childTitle}," +
             "to.site_name={childSitename} " +
             "MERGE p=(from)-[r:related]->(to) " +
-            "ON CREATE SET r.votes = 1 " +
-            "ON MATCH SET r.votes = r.votes + 1 " +
+            "ON CREATE SET r.likes = 1 " +
+            "ON MATCH SET r.likes = r.likes + 1 " +
             "RETURN p", keys)
     });
 }
