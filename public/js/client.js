@@ -92,8 +92,9 @@ var Items = React.createClass({
                 });
 
         return this.props.asGuPopup ?
-            (<div>
-                <div className="pageTitle">Recommended by Free Press</div>
+            (
+            <div>
+                <div className="pageTitle">Recommended by Open Bubble</div>
                 <div className='items guPopup'>
                     {items}
                 </div>
@@ -102,7 +103,7 @@ var Items = React.createClass({
             (<div className={this.state.items && this.state.items.length ? '' : 'empty'}>
                 <div className="itemsCount">{items.length}</div>
                 <div className="pageTitle">
-                    {this.props.title + ' Free Press'}
+                    {this.props.title + ' Open Bubble'}
                     {self.state.alertText ? <span className='alert'>{self.state.alertText}</span> : null}
                 </div>
                 <div className='instructions'>Drop related articles below. Upvote the best.</div>                
