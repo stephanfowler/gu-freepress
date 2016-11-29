@@ -7,7 +7,7 @@ Prototype system for crowdsourcing “related content” for arbitrary articles.
 
 _Developed for Guardian HackDay._
 
-## Setup
+## Installing the extension
 
 * clone the repo
 * go to your Chrome Extensions page
@@ -15,6 +15,11 @@ _Developed for Guardian HackDay._
 * click "Load unpacked extension..."
 * choose the "chrome-extension" directory from your repo copy
 * make sure "Enabled" is checked
+
+## Development
+
+* `npm i`
+* compile the code in public/js with `npm run build`
 
 #### neo4j
 
