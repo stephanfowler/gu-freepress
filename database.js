@@ -68,8 +68,8 @@ function associate(parentUrl, childUrl) {
 function getRelationsQuery(parentUrl) {
     return session
         .run("" +
-        "MATCH (article { url:{id} })-[:related]-(relation)" +
-        "RETURN article, relation;", {id: parentUrl});
+        "MATCH (article { url:{id} })-[edge:related]-(relation)" +
+        "RETURN article, edge, relation;", {id: parentUrl});
 }
 
 function getRelations(parentUrl) {
