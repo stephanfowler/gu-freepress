@@ -117,7 +117,7 @@ var Items = React.createClass({
             React.createElement(
                 "div",
                 { className: "instructions" },
-                "Drop related articles below. Upvote the best."
+                "Disagree? Add alternative articles below. Upvote the best."
             ),
             React.createElement(
                 "div",
