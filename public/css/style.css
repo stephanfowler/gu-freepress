@@ -9,9 +9,10 @@ body {
     -webkit-line-clamp: 4;
     cursor: pointer;
     display: -webkit-box;
-    padding: 10px;
     min-width: 300px;
-    font-family: Helvetica, sans-serif;;
+    font-family: 'Droid Sans', sans-serif;
+    line-height: 1.35;
+    font-size: 90%
 }
 
 body, a {
@@ -40,6 +41,7 @@ body, a {
 
 .pageTitle {
     font-weight: bold;
+    margin: 10px 0 0 10px;
 }
 
 .pending {
@@ -56,6 +58,7 @@ body, a {
     font-size: 11px;
     line-height: 1.4;
     right: 10px;
+    top: 10px;
     background-color: #2196F3;
     padding: 0 5px;
     border-radius: 13px;
@@ -69,11 +72,16 @@ body, a {
 .item {
     position: absolute;
     left: 0;
-    width: 100%;
+    width: calc(100% - 20px);
     background: #fff;
     overflow: hidden;
     height: 100px;
     transition: top .3s ease-in;
+    padding: 5px 10px;
+}
+
+.item:hover {
+    background: rgba(0,0,0,0.05);
 }
 
 .item .siteName {
@@ -101,20 +109,21 @@ body, a {
 
 .item .likes {
     position: absolute;
-    right: 0;
-    top: 2px;
-    font-size: 14px;
+    right: 5px;
+    top: 5px;
     font-weight: bold;
     cursor: pointer;
     color: #666;
     text-align: right;
     padding: 0 5px 0 9px;
     border-radius: 10px;
+    line-height: 1.5;
+    font-size: 12px
 }
 
 .item:hover .likes {
     color: #005689;
-    background: #eee;
+    background: rgba(0, 86, 137, 0.14);;
 }
 
 .item .likes:hover {
@@ -124,13 +133,12 @@ body, a {
 
 .item.liked .likes {
     background: #e6711b;
-    color: #fff;
+    color: #fff;;
 }
 
 .item:hover .likes:before {
     content: 'upvote';
     font-weight: normal;
-    font-size: 14px;
     margin-right: 4px;
 }
 
@@ -151,13 +159,13 @@ body, a {
     display: block;
     margin-left: 130px;
     color: rgb(51, 51, 51);
-    font-size: 14px;
-    line-height: 1.4;
+    height: 75px;
+    overflow: hidden;
 }
 
 .item .image {
     position: absolute;
-    top: 26px;
+    top: 28px;
     width: 120px;
     height: 72px;
     position: absolute;
@@ -171,6 +179,7 @@ body, a {
     line-height: 16px;
     color: #666;
     padding: 3px 0 10px;
+    margin-left: 10px;
 }
 
 .dropbox {
