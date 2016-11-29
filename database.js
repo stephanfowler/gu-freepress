@@ -46,8 +46,18 @@ function associate(parentUrl, childUrl) {
         };
         return session
             .run(
-            "MERGE (from {url:{parentUrl}, description:{parentDescription}, image_url:{parentImageUrl}, type:{parentType}, title:{parentTitle}, site_name:{parentSitename}}) " +
-            "MERGE (to {url:{childUrl}, description:{childDescription}, image_url:{childImageUrl}, type:{childType}, title:{childTitle}, site_name:{childSitename}}) " +
+            "MERGE (from {url:{parentUrl}})" +
+            "ON CREATE SET from.description={parentDescription}," +
+            "from.image_url={parentImageUrl}," +
+            "from.type={parentType}," +
+            "from.title={parentTitle}," +
+            "from.site_name={parentSitename}" +
+            "MERGE (to {url:{childUrl}})" +
+            "ON CREATE SET to.description={childDescription}," +
+            "to.image_url={childImageUrl}," +
+            "to.type={childType}," +
+            "to.title={childTitle}," +
+            "to.site_name={childSitename} " +
             "MERGE p=(from)-[r:related]->(to) " +
             "ON CREATE SET r.votes = 1 " +
             "ON MATCH SET r.votes = r.votes + 1 " +
