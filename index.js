@@ -192,19 +192,21 @@ app.get('/api/show-popup', function(req, res) {
 });
 
 app.post('/api/like', urlencodedParser, function (req, res) {
-    var url = clean(req.body.url),
-        topic = clean(req.body.topic);
+    var parentUrl = clean(req.body.parentUrl),
+        childUrl = clean(req.body.childUrl);
 
-    if (url) {
-        likeItem(url)
-        .then(
-            function (result) {
-                respondWithTopicItems(res, topic);
-            },
-            function (err) {
+    if (parentUrl && childUrl) {
+        database.associate(parentUrl, childUrl)
+            .then((result) => {
+                res.status(200);
+                res.send({
+                    items: result
+                })
+            })
+            .catch((err) => {
                 res.status(500);
-            }
-        );
+                res.send({err: 'Failed while talking to database'})
+            });
     } else {
         res.status(400);
     }
