@@ -17,7 +17,8 @@ var express = require('express'),
         name: 'items',
         columns: ['created', 'topic', 'url', 'likes', 'title', 'description', 'image_url', 'site_name']
     },
-    items = sql.define(itemsSchema);
+    items = sql.define(itemsSchema)
+    database = require('./database');
 
 
 app.set('port', (process.env.PORT || 5000));
@@ -144,33 +145,20 @@ function respondWithTopicItems(res, topic, stickyUrl) {
 app.get('/', function(req, res) {
     var parentUrl = req.query.parentUrl,
         title = req.query.title,
-        asGuPopup = req.query.asGuPopup,
-        getItems  = asGuPopup ? getTopicItemsGuardian : getTopicItems;
+        asGuPopup = req.query.asGuPopup;
 
     if (parentUrl) {
-        getTopicFromUrl(parentUrl)
-        .then(function (topic) {
-            if (topic) {
-                getItems(topic).then(
-                    function(result) {
+        database.getRelations(parentUrl)
+        .then(function (relations) {
                         res.render('index', {
                             title: title,
                             asGuPopup: asGuPopup,
                             parentUrl: parentUrl,
-                            items: result.rows.slice(0, 6)
+                            items: relations.items
                         });
-                    },
-                    function(err) {
-                        res.send(err);
-                    }
-                );
-            } else {
-                res.render('index', { 
-                    parentUrl: parentUrl
-                });
-            }
-        }); 
-    } else {
+            });
+    }
+    else {
         res.send('No parentUrl query param!')
     }
 });
@@ -224,70 +212,28 @@ app.post('/api/like', urlencodedParser, function (req, res) {
 
 app.post('/api/add', urlencodedParser, function (req, res) {
     var parentUrl = clean(req.body.parentUrl),
-        childUrl  = clean(req.body.childUrl),
-        specs;
+        childUrl  = clean(req.body.childUrl);
 
     res.setHeader('Content-Type', 'application/json');
     
     if (parentUrl && childUrl) {
-        specs = [
-            {url: parentUrl, topic: getTopicFromUrl(parentUrl)},
-            {url: childUrl,  topic: getTopicFromUrl(childUrl)}
-        ];
-
-        Promise.all(
-            _.pluck(specs, 'topic')
-        ).then(
-            function(topics) {
-                var topic = _.compact(topics)[0];
-
-                if (!topic) {
-                    topic = sha1(parentUrl);
-                }
-
-                topics.forEach(function(topic, i) {
-                    specs[i].topic = topic; // convert promise to value
-                })
-
-                Promise.all(
-                    specs
-                    .filter(function(spec) {
-                        return !spec.topic; // only fetch OG data for urls that havent previously been registered
-                    })
-                    .map(function(spec) {
-                        return openGraph(spec.url);
-                    })                    
-                )
-                .catch(function(err) {
-                    res.status(304);
-                    res.send({err: 'Failed to find opengraph data'});
-                })
-                .then(function(ogMetas) {
-                    Promise.all(
-                        ogMetas.map(function (ogMeta) {
-                            return addItem(ogMeta, topic);
-                        })
-                    )
-                    .catch(function(err) {
-                        res.status(304);
-                        respondWithTopicItems(res, topic, childUrl);
-                    })
-                    .then(function() {
-                        res.status(200);
-                        respondWithTopicItems(res, topic, childUrl);
-                    })
-                })
-            },
-            function(err) {
+        database.associate(parentUrl, childUrl)
+            .then(_ => database.getRelations(parentUrl))
+            .then((relations) => {
+                res.status(200);
+                res.send({
+                    items: relations.items
+                });
+            })
+            .catch((err) => {
                 res.status(500);
                 res.send({err: 'Failed while talking to database'});
-            }
-        );
+            });
     } else {
         res.status(400);
         res.send({err: 'No parentUrl and childUrl'});
     }
-})
+});
 
 app.listen(app.get('port'), function() {
     console.log('Node app running on port', app.get('port'));
