@@ -80,7 +80,7 @@ var Items = React.createClass({
 
     render: function () {
         var self = this,
-            items = this.state.items
+            items = this.state.items.filter(item => item.url !== self.props.parentUrl)
                 .map(function(item, index) {
                     return <Item
                         key={item.url}
@@ -100,6 +100,7 @@ var Items = React.createClass({
             </div>)
             :
             (<div className={this.state.items && this.state.items.length ? '' : 'empty'}>
+                <div className="itemsCount">{items.length}</div>
                 <div className="pageTitle">
                     {this.props.title + ' Free Press'}
                     {self.state.alertText ? <span className='alert'>{self.state.alertText}</span> : null}
