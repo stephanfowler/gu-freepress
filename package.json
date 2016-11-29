@@ -21,7 +21,7 @@
     "sql": "~0.52.0"
   },
   "engines": {
-    "node": "0.12.2"
+    "node": "6.9.1"
   },
   "repository": {
     "type": "git",
