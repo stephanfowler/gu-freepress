@@ -3,39 +3,60 @@ console.log('Free Press: running');
 var thisUrl = window.location.href, 
 
     domain = 'https://quiet-island-1381.herokuapp.com',
-    //domain = 'localhost:5000',
+    //domain = 'http://localhost:5000',
     iframeSrc  = domain + '/?parentUrl=' + thisUrl;
 
 document.body.insertAdjacentHTML('beforeend', 
-    '<div id="guPopup">' +
-        '<iframe id="guPopup" src="' + iframeSrc + '" style="' +
-            'border: 0;' +
-            'background: #fff;' +
-            'padding: 10px;' +
-            'box-shadow: 0px 0px 20px #999;' +
-            'z-index: 2147483647;' +
-            'position: absolute;' +
-            'top: 0;' +
-            'right: 0;' +
-            'height: 400px;' +
-            'overflow: hidden;' +
-        '"></iframe>' +
-        '<a onClick="el = document.querySelector(\'#guPopup\');el.parentNode.removeChild(el);" style="' +
-            'box-sizing: border-box;' +
-            'z-index: 50001;' +
-            'position: absolute;' +
-            'top: 13px;' +
-            'right: 10px;' +
-            'cursor: pointer;' +
-            'font-size: 14px;' +
-            'font-family: monospace;' +
-            'border: 1px solid #999;' +
-            'color: #999;' +
-            'padding: 4px 3px;' +
-            'width: 16px;' +
-            'height: 15px;' +
-            'line-height: 5px;' +
-            'border-radius: 10px;' +
-        '">&times;</a>' +
-    '</div>'
+    `<style>
+        #bubbleSideBar {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            right: 0;
+            width: 320px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+            z-index: 2147483647;
+            overflow: hidden;
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            border-bottom-right-radius: 0;
+            transition: all 150ms;
+        }
+        #bubbleSideBar.closed {
+            height: 35px;
+            width: 37px;
+            border-bottom-left-radius: 15px;
+            border-top-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        #bubbleToggle {
+            height: 32px;
+            width: 32px;
+            display: block;
+            position: absolute;
+            right: 10px;
+            top: 0px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <div id="bubbleSideBar" class="closed">
+        <iframe src="${iframeSrc}" style="
+            border: 0;
+            background: #fff;
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: 0px;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        "></iframe>
+        <!-- closer -->
+        <div id="bubbleToggle"
+            onClick="document.querySelector('#bubbleSideBar').classList.toggle('closed')"></div>
+    </div>`
 )
