@@ -117,7 +117,7 @@ var Items = React.createClass({
             React.createElement(
                 "div",
                 { className: "instructions" },
-                "Disagree? Add alternative articles below"
+                "Disagree? Drag & drop alternative articles here"
             ),
             React.createElement(
                 "div",
