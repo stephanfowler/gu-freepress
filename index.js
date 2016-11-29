@@ -164,7 +164,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/api/show-popup', function(req, res) {
-    var parentUrl = req.query.parentUrl;
+   var parentUrl = req.query.parentUrl;
 
     res.setHeader('Content-Type', 'application/json');
     res.status(200);
