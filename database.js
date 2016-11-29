@@ -83,9 +83,14 @@ function getRelations(parentUrl) {
                 if (!parent) {
                     parent = record.get("article").properties;
                 }
+                var edge = record.get("edge");
                 var relation = record.get("relation");
 
-                records.push(relation.properties)
+                var relationWithLikesFromEdge = _.merge(
+                    relation.properties,
+                    {likes: edge.properties.likes.toInt()});
+
+                records.push(relationWithLikesFromEdge)
             }
 
             return _.merge(parent,
