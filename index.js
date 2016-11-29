@@ -26,10 +26,20 @@ app.get('/', function(req, res) {
     if (parentUrl) {
         database.getRelations(parentUrl)
         .then(function (relations) {
-                        res.render('index', {
-                            parentUrl: parentUrl,
-                            items: relations.items
-                        });
+                if(relations && relations.items) {
+                    res.render('index', {
+                        parentUrl: parentUrl,
+                        items: relations.items
+                    });
+                } else {
+                    res.render('index', {
+                        parentUrl: parentUrl
+                    });
+                }
+            })
+        .catch((err) => {
+                res.status(500);
+                res.send({err: 'Failed while talking to database'})
             });
     }
     else {
