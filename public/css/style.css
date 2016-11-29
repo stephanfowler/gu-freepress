@@ -81,7 +81,7 @@ body, a {
 }
 
 .item:hover {
-    background: rgba(0,0,0,0.05);
+    background: #f7f6f6;
 }
 
 .item .siteName {
