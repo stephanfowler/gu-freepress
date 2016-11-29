@@ -100,8 +100,9 @@ var Items = React.createClass({
                 </div>
             </div>)
             :
-            (<div className={this.state.items && this.state.items.length ? '' : 'empty'}>
+            (<div className={"app-container-wrapper" + (this.state.items && this.state.items.length ? '' : ' empty')}>
                 <div className="itemsCount">{items.length}</div>
+                <div className="windowToggler">⨉</div>
                 <div className="pageTitle">
                     {this.props.title + ' Open Bubble'}
                     {self.state.alertText ? <span className='alert'>{self.state.alertText}</span> : null}

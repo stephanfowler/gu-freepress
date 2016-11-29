@@ -7,44 +7,53 @@ var thisUrl = window.location.href,
     iframeSrc  = domain + '/?parentUrl=' + thisUrl;
 
 document.body.insertAdjacentHTML('beforeend', 
-    `<div id="guPopup" style="
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: 320px;
-        background-color: white;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
-        z-index: 2147483647;
-        ">
+    `<style>
+        #bubbleSideBar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 320px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+            z-index: 2147483647;
+            overflow: hidden;
+            border-bottom-left-radius: 15px;
+            border-top-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+
+        }
+        #bubbleSideBar.closed {
+            height: 35px;
+            width: 37px;
+        }
+        #bubbleToggle {
+            height: 32px;
+            width: 32px;
+            display: block;
+            position: absolute;
+            right: 10px;
+            top: 0px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <div id="bubbleSideBar" class="closed">
         <iframe src="${iframeSrc}" style="
             border: 0;
             background: #fff;
             position: absolute;
-            top: 10px;
-            right: 10px;
-            bottom: 10px;
-            left: 10px;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: 0px;
             overflow: hidden;
-            height: calc(100% - 10px);
+            height: 100%;
+            width: 100%;
         "></iframe>
         <!-- closer -->
-        <a onClick="el = document.querySelector('#guPopup');el.parentNode.removeChild(el);" style="
-            box-sizing: border-box;
-            z-index: 50001;
-            position: absolute;
-            top: 13px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            font-family: monospace;
-            border: 1px solid #999;
-            color: #999;
-            padding: 4px 3px;
-            width: 16px;
-            height: 15px;
-            line-height: 5px;
-            border-radius: 10px;
-        ">&times;</a>
+        <div id="bubbleToggle"
+            onClick="document.querySelector('#bubbleSideBar').classList.toggle('closed')"></div>
     </div>`
 )

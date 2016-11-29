@@ -3,18 +3,30 @@ body {
     font-family: "Guardian Egyptian Web","Guardian Text Egyptian Web",Georgia,serif;
     font-size: 16px;
     font-weight: normal;
-    height: 60px;
     line-height: 20px;
     -webkit-box-orient: vertical;
     -webkit-font-smoothing: antialiased;
     -webkit-line-clamp: 4;
     cursor: pointer;
     display: -webkit-box;
+    padding: 10px;
 }
 
 body, a {
     color: rgb(51, 51, 51);
     text-decoration: none;
+}
+
+@media (max-width: 40px) {
+    .app-container-wrapper *:not(.itemsCount) {
+        display: none
+    }
+}
+
+@media (min-width: 40px) {
+    .itemsCount {
+        display: none
+    }
 }
 
 #app-container {
@@ -32,6 +44,18 @@ body, a {
 .items {
     position: relative;
     height: 660px;
+}
+
+.itemsCount,
+.windowToggler {
+    position: absolute;
+    font-size: 11px;
+    line-height: 1.4;
+    right: 10px;
+    background-color: #2196F3;
+    padding: 0 5px;
+    border-radius: 13px;
+    color: white;
 }
 
 .items.guPopup {
