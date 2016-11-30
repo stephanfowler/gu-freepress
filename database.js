@@ -96,7 +96,7 @@ function getRelations(parentUrl) {
 
             var deduplicatedRecords = _.uniq(records, 'url');
 
-            return _.merge(parent, {items: deduplicatedRecords});
+            return {parent: parent, items: deduplicatedRecords};
         });
 }
 
