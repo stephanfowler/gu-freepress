@@ -27,6 +27,8 @@ app.get('/', function(req, res) {
         database.getRelations(parentUrl)
         .then(function (relations) {
                 if(relations && relations.items) {
+                    res.setHeader('Cache-Control', 'no-cache');
+                    res.setHeader('Expires', '0');
                     res.render('index', {
                         parentUrl: parentUrl,
                         items: relations.items
