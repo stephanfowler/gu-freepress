@@ -72,6 +72,7 @@ function getRelationsQuery(parentUrl) {
         .run("" +
         "MATCH (parent { url:{id} })-[edge:related]-(child)" +
         "OPTIONAL MATCH (child)-[secondEdge:related]-(secondChild)" +
+        "WHERE parent <> secondChild " +
         "RETURN parent, edge, child, secondEdge, secondChild " +
         "ORDER BY edge.likes DESC;", {id: parentUrl});
 }
