@@ -5,9 +5,11 @@ var thisUrl = window.location.href,
     //domain = 'https://quiet-island-1381.herokuapp.com',
     domain = 'https://limitless-spire-48171.herokuapp.com',
     //domain = 'http://localhost:5000',
-    iframeSrc  = domain + '/?parentUrl=' + thisUrl;
 
-document.body.insertAdjacentHTML('beforeend', 
+    iframeSrc  = domain + '/?parentUrl=' + thisUrl,
+    hideClass = window.location.hash === "#open-bubble" ? '' : 'closed';
+
+domain !== location.origin && document.body.insertAdjacentHTML('beforeend', 
     `<style>
         #bubbleSideBar {
             position: fixed;
@@ -43,7 +45,7 @@ document.body.insertAdjacentHTML('beforeend',
             cursor: pointer;
         }
     </style>
-    <div id="bubbleSideBar" class="closed">
+    <div id="bubbleSideBar" class="${hideClass}">
         <iframe src="${iframeSrc}" style="
             border: 0;
             background: #fff;
