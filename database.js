@@ -2,10 +2,12 @@ var neo4j = require('neo4j-driver').v1,
     openGraph = require('./opengraph').openGraph,
     _ = require('lodash');
 
-const USERNAME = "neo4j";
-const PASSWORD = "abc";
+const USERNAME = process.env.GRAPHENEDB_BOLT_USER; // "neo4j";
+const PASSWORD = process.env.GRAPHENEDB_BOLT_PASSWORD; // "abc";
+const BOLT_URL = process.env.GRAPHENEDB_BOLT_URL; // "bolt://localhost";
 
-var driver = neo4j.driver("bolt://localhost", neo4j.auth.basic(USERNAME, PASSWORD));
+var driver = neo4j.driver(BOLT_URL, neo4j.auth.basic(USERNAME, PASSWORD));
+driver.onError = function (err) { console.log(err); }
 var session = driver.session();
 
 function associate(parentUrl, childUrl) {
