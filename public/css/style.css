@@ -81,7 +81,7 @@ body, a {
 }
 
 .item:hover {
-    background: rgba(0,0,0,0.05);
+    background: #f7f6f6;
 }
 
 .item .siteName {
@@ -190,7 +190,7 @@ body, a {
     display: block;
     height: 100px;
     border: 2px dashed #ccc;
-    margin: 10px 0;
+    margin: 10px;
 }
 
 .pending .dropbox {
