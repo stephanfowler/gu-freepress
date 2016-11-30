@@ -56,10 +56,11 @@ app.post('/api/like', urlencodedParser, function (req, res) {
 
     if (parentUrl && childUrl) {
         database.associate(parentUrl, childUrl)
-            .then((result) => {
+            .then(_ => database.getRelations(parentUrl))
+            .then((relations) => {
                 res.status(200);
                 res.send({
-                    items: result
+                    items: relations.items
                 })
             })
             .catch((err) => {
