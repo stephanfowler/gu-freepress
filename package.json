@@ -13,6 +13,7 @@
     "gm": "^1.18.1",
     "jade": "^1.11.0",
     "lodash": "~3.9.3",
+    "neo4j-driver": "^1.0.4",
     "open-graph": "~0.1.5",
     "pg": "4.x",
     "promise": "~7.0.3",
@@ -20,7 +21,7 @@
     "sql": "~0.52.0"
   },
   "engines": {
-    "node": "0.12.2"
+    "node": "6.9.1"
   },
   "repository": {
     "type": "git",
