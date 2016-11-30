@@ -7,12 +7,12 @@ body {
     -webkit-box-orient: vertical;
     -webkit-font-smoothing: antialiased;
     -webkit-line-clamp: 4;
-    cursor: pointer;
+    cursor: default;
     display: -webkit-box;
     min-width: 300px;
     font-family: 'Droid Sans', sans-serif;
     line-height: 1.35;
-    font-size: 90%
+    font-size: 90%;
 }
 
 body, a {
@@ -42,6 +42,16 @@ body, a {
 .pageTitle {
     font-weight: bold;
     margin: 10px 0 0 10px;
+}
+
+.pageTitle a:after {
+    content: ' →';
+    color: rgba(0,0,0, 0.3);
+}
+
+.pageTitle a:hover,
+.pageTitle a:hover:after {
+    color: #2196F3
 }
 
 .pending {
@@ -89,7 +99,7 @@ body, a {
     font-weight: bold;
     line-height:  18px;
     padding: 2px 0;
-    color: #005689;
+    color: #2196F3;
 }
 
 .item.is-self .siteName:before {
@@ -122,12 +132,12 @@ body, a {
 }
 
 .item:hover .likes {
-    color: #005689;
-    background: rgba(0, 86, 137, 0.14);;
+    color: #2196F3;
+    background: rgba(33, 150, 243, 0.15);
 }
 
 .item .likes:hover {
-    background: #005689;
+    background: #2196F3;
     color: #fff;
 }
 
@@ -137,7 +147,7 @@ body, a {
 }
 
 .item:hover .likes:before {
-    content: 'upvote';
+    content: 'bubble up';
     font-weight: normal;
     margin-right: 4px;
 }
@@ -200,4 +210,56 @@ body, a {
 .alert {
     margin-left: 4px;
     color: #e6711b;
+}
+
+#share-icon {
+    width: 13px;
+    position: absolute;
+    right: 10px;
+    display: none;
+    top: 10px;
+    cursor: pointer;
+}
+#share-icon:hover {
+    fill: #2196F3
+}
+
+#suggestions {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    font-size: 11px;
+}
+
+#suggestions ul {
+    margin:0;
+    padding: 0;
+    list-style-type: none
+}
+
+#suggestions li {
+    margin-bottom: 1em
+}
+
+.suggestion-source {
+    color: #2196F3;
+    font-weight: bold;
+}
+
+@media (min-width: 321px) {
+    .pageTitle a:after,
+    .windowToggler,
+    .item.is-self .siteName:before,
+    .item.is-self .siteName:after {
+        display: none;
+    }
+    #app-container {
+        max-width: 100%;
+    }
+    body {
+        zoom: 1.4;
+    }
+    #share-icon {
+        display: block
+    }
 }
