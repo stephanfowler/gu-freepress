@@ -3,10 +3,11 @@ console.log('Free Press: running');
 var thisUrl = window.location.href, 
 
     domain = 'https://quiet-island-1381.herokuapp.com',
-    //domain = 'http://localhost:5000',
-    iframeSrc  = domain + '/?parentUrl=' + thisUrl;
+    domain = 'http://localhost:5000',
+    iframeSrc  = domain + '/?parentUrl=' + thisUrl,
+    hideClass = window.location.hash === "#open-bubble" ? '' : 'closed';
 
-document.body.insertAdjacentHTML('beforeend', 
+domain !== location.origin && document.body.insertAdjacentHTML('beforeend', 
     `<style>
         #bubbleSideBar {
             position: fixed;
@@ -42,7 +43,7 @@ document.body.insertAdjacentHTML('beforeend',
             cursor: pointer;
         }
     </style>
-    <div id="bubbleSideBar" class="closed">
+    <div id="bubbleSideBar" class="${hideClass}">
         <iframe src="${iframeSrc}" style="
             border: 0;
             background: #fff;
