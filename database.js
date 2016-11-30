@@ -101,10 +101,12 @@ function getRelations(parentUrl) {
                     secondChild.properties,
                     {likes: secondEdge.properties.likes.toInt()});
 
-                if (childWithLikesFromEdge){
+                if (childWithLikesFromEdge &&
+                    !_.find(records, record => record.url === childWithLikesFromEdge.url)){
                     records.push(childWithLikesFromEdge);
                 }
-                if (secondChildWithLikesFromEdge) {
+                if (secondChildWithLikesFromEdge &&
+                    !_.find(records, record => record.url === secondChildWithLikesFromEdge.url)) {
                     records.push(secondChildWithLikesFromEdge);
                 }
             }
