@@ -3,7 +3,7 @@ console.log('Free Press: running');
 var thisUrl = window.location.href, 
 
     domain = 'https://quiet-island-1381.herokuapp.com',
-    domain = 'http://localhost:5000',
+    // domain = 'http://localhost:5000',
     iframeSrc  = domain + '/?parentUrl=' + thisUrl,
     hideClass = window.location.hash === "#open-bubble" ? '' : 'closed';
 
