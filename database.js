@@ -100,12 +100,17 @@ function getRelations(parentUrl) {
                     secondChild.properties,
                     {likes: secondEdge.properties.likes.toInt()});
 
-
-                records.push(childWithLikesFromEdge);
-                records.push(secondChildWithLikesFromEdge);
+                if (childWithLikesFromEdge){
+                    records.push(childWithLikesFromEdge);
+                }
+                if (secondChildWithLikesFromEdge) {
+                    records.push(secondChildWithLikesFromEdge);
+                }
             }
 
-            records.push(parent);
+            if(parent) {
+                records.push(parent);
+            }
 
             var deduplicatedRecords = _.uniq(records, 'url');
 
