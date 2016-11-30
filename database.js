@@ -118,8 +118,9 @@ function getRelations(parentUrl) {
             }
 
             var deduplicatedRecords = _.uniq(records, 'url');
+            var sortedRecords = _.sortBy(deduplicatedRecords, record => record.likes).reverse();
 
-            return {parent: parent, items: deduplicatedRecords};
+            return {parent: parent, items: sortedRecords};
         });
 }
 
