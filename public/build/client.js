@@ -70,12 +70,12 @@ var Items = React.createClass({
         });
     },
 
-    like: function (childUrl) {
+    like: function (url, topic) {
         var self = this;
 
         this.api('like', {
-            parentUrl: self.props.parentUrl,
-            childUrl: childUrl
+            url: url,
+            topic: topic
         }, null);
     },
 
@@ -126,7 +126,7 @@ var Items = React.createClass({
             React.createElement(
                 "div",
                 { className: "instructions" },
-                "Disagree? Drag & drop alternative articles below"
+                "Drop related articles below. Upvote the best."
             ),
             React.createElement(
                 "div",
@@ -153,7 +153,7 @@ var Suggestions = React.createClass({
     componentDidMount: function () {
         marmottajax({
             method: "get",
-            url: 'http://juicer.api.bbci.co.uk/articles',
+            url: 'https://juicer.api.bbci.co.uk/articles',
             json: true,
             parameters: {
                 api_key: 'iCNGx8l4R3Pf2ge9itNAvz3MXOVK9lyG',
@@ -215,7 +215,7 @@ Item = React.createClass({
         this.props.item.likes += 1;
         this.state.liked = true;
         this.forceUpdate();
-        this.props.like(this.props.item.url);
+        this.props.like(this.props.item.url, this.props.item.topic);
     },
 
     render: function () {
@@ -257,6 +257,5 @@ React.render(React.createElement(
         parentUrl: INITIAL.parentUrl,
         items: INITIAL.items,
         title: INITIAL.title,
-        asGuPopup: INITIAL.asGuPopup }),
-    React.createElement(Suggestions, { items: [], bubbles: INITIAL.items, parentUrl: INITIAL.parentUrl })
+        asGuPopup: INITIAL.asGuPopup })
 ), document.getElementById('app-container'));
