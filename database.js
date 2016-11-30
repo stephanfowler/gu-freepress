@@ -95,19 +95,21 @@ function getRelations(parentUrl) {
                     child.properties,
                     {likes: edge.properties.likes.toInt()});
 
-                var secondEdge = record.get("secondEdge");
-                var secondChild = record.get('secondChild');
-                var secondChildWithLikesFromEdge = _.merge(
-                    secondChild.properties,
-                    {likes: secondEdge.properties.likes.toInt()});
-
-                if (childWithLikesFromEdge &&
-                    !_.find(records, record => record.url === childWithLikesFromEdge.url)){
+                if (childWithLikesFromEdge && !_.find(records, record => record.url === childWithLikesFromEdge.url)) {
                     records.push(childWithLikesFromEdge);
                 }
-                if (secondChildWithLikesFromEdge &&
-                    !_.find(records, record => record.url === secondChildWithLikesFromEdge.url)) {
-                    records.push(secondChildWithLikesFromEdge);
+
+                var secondEdge = record.get("secondEdge");
+                var secondChild = record.get('secondChild');
+                if (secondChild) {
+                    var secondChildWithLikesFromEdge = _.merge(
+                        secondChild.properties,
+                        {likes: secondEdge.properties.likes.toInt()});
+
+
+                    if (secondChildWithLikesFromEdge && !_.find(records, record => record.url === secondChildWithLikesFromEdge.url)) {
+                        records.push(secondChildWithLikesFromEdge);
+                    }
                 }
             }
 
