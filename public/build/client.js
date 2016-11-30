@@ -90,7 +90,6 @@ var Items = React.createClass({
                 like: self.like,
                 isSelf: item.url === self.props.parentUrl });
         });
-
         return React.createElement(
             "div",
             { className: "app-container-wrapper" + (this.state.items && this.state.items.length ? '' : ' empty') },
@@ -109,7 +108,7 @@ var Items = React.createClass({
                 { className: "pageTitle" },
                 React.createElement(
                     "a",
-                    { href: "javascript:window.open(this.location)" },
+                    { href: "javascript:parent.location = this.location" },
                     "Open Bubble"
                 ),
                 React.createElement(
@@ -137,6 +136,66 @@ var Items = React.createClass({
                     onDragLeave: this.dragLeave },
                 items,
                 React.createElement("div", { key: "dropbox", className: "dropbox" })
+            )
+        );
+    }
+});
+
+var Suggestions = React.createClass({
+    displayName: "Suggestions",
+
+    getInitialState: function () {
+        return {
+            items: this.props.items,
+            bubbles: this.props.bubbles
+        };
+    },
+    componentDidMount: function () {
+        marmottajax({
+            method: "get",
+            url: 'http://juicer.api.bbci.co.uk/articles',
+            json: true,
+            parameters: {
+                api_key: 'iCNGx8l4R3Pf2ge9itNAvz3MXOVK9lyG',
+                q: 'Ohio ISIS'
+            }
+        }).then(function (result) {
+            console.log(result.hits);
+            this.setState({
+                items: result.hits
+            });
+        }.bind(this));
+    },
+    render: function () {
+        return React.createElement(
+            "div",
+            { id: "suggestions", style: { top: (this.state.bubbles.length ? (this.state.bubbles.length + 1) * 100 : 175) + 'px' } },
+            React.createElement(
+                "h2",
+                null,
+                "Suggestions"
+            ),
+            React.createElement(
+                "ul",
+                null,
+                this.state.items.map(item => React.createElement(
+                    "li",
+                    null,
+                    React.createElement(
+                        "a",
+                        { className: "suggestion-link", target: "_top", href: item.url + '#open-bubble' },
+                        React.createElement(
+                            "div",
+                            { className: "suggestion-source" },
+                            item.source['source-name']
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "suggestion-title" },
+                            item.title
+                        )
+                    )
+                ))
             )
         );
     }
@@ -191,8 +250,13 @@ Item = React.createClass({
     }
 });
 
-React.render(React.createElement(Items, {
-    parentUrl: INITIAL.parentUrl,
-    items: INITIAL.items,
-    title: INITIAL.title,
-    asGuPopup: INITIAL.asGuPopup }), document.getElementById('app-container'));
+React.render(React.createElement(
+    "div",
+    null,
+    React.createElement(Items, {
+        parentUrl: INITIAL.parentUrl,
+        items: INITIAL.items,
+        title: INITIAL.title,
+        asGuPopup: INITIAL.asGuPopup }),
+    React.createElement(Suggestions, { items: [], bubbles: INITIAL.items, parentUrl: INITIAL.parentUrl })
+), document.getElementById('app-container'));
