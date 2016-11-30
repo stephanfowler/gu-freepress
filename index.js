@@ -26,12 +26,10 @@ app.get('/', function(req, res) {
     if (parentUrl) {
         database.getRelations(parentUrl)
         .then(function (relations) {
-                if(relations && relations.items && relations.parent) {
-                    var itemsWithParent = relations.items.concat(relations.parent);
-
+                if(relations && relations.items) {
                     res.render('index', {
                         parentUrl: parentUrl,
-                        items: itemsWithParent
+                        items: relations.items
                     });
                 } else {
                     res.render('index', {
