@@ -99,7 +99,7 @@ var Items = React.createClass({
                     <svg id="share-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 441.1 441.1"><path d="M376.7 172h-72c-9.3 0-17 7.6-17 17s7.7 17 17 17h54.7v201H81.7V206H142c9.4 0 17-7.7 17-17s-7.6-17-17-17H64.5c-9.3 0-16.7 8.5-16.7 17.8v235.7c0 9.4 7.4 15.6 16.7 15.6h312.3c9.3 0 16.7-6 16.7-15.2v-236c0-9.2-7.4-17.7-16.7-17.7z"/><path d="M217.7 299.5c9.4 0 17-7.7 17-17V52l72.6 64.7c3 2.8 7.3 4.3 11.3 4.3 4.8 0 9.3-2 12.7-5.7 6.3-7 5.7-18-1.4-24l-98-87c-6.5-5.6-15.5-5.8-22-.7-3 1.4-5.7 4-7.4 6.8L118 91.7c-6.7 6.5-7 17.3-.5 24 6.5 7 17.3 7 24 .6l59-56.6v222.7c0 9.3 7.7 17 17 17z"/></svg>
                     {self.state.alertText ? <span className='alert'>{self.state.alertText}</span> : null}
                 </div>
-                <div className='instructions'>"Disagree? Drag & drop alternative articles below"</div>                
+                <div className='instructions'>Disagree? Drag & drop alternative articles below"</div>                
                 <div className={'items' + (this.state.isUnderDrag ? ' pending' : '')}
                         onDrop={this.drop}
                         onDragOver={this.dragOver}
