@@ -70,12 +70,12 @@ var Items = React.createClass({
         });
     },
 
-    like: function (url, topic) {
+    like: function (childUrl) {
         var self = this;
 
         this.api('like', {
-            url: url,
-            topic: topic
+            parentUrl: self.props.parentUrl,
+            childUrl: childUrl
         }, null);
     },
 
@@ -146,7 +146,7 @@ Item = React.createClass({
         this.props.item.likes += 1;
         this.state.liked = true;
         this.forceUpdate();
-        this.props.like(this.props.item.url, this.props.item.topic);
+        this.props.like(this.props.item.url);
     },
 
     render: function () {
