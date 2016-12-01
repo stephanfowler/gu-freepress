@@ -85,11 +85,16 @@ function getRelations(parentUrl) {
 
             for (i = 0; i < result.records.length; i++) {
                 var record = result.records[i];
+                var edge = record.get("edge");
+                var child = record.get("child");
+
                 if (!parent) {
                     parent = record.get("parent").properties;
                 }
-                var edge = record.get("edge");
-                var child = record.get("child");
+
+                if (parent && parent.url === child.properties.url) {
+                    parent = _.merge(parent, {likes: edge.properties.likes.toInt()});
+                }
 
                 var childWithLikesFromEdge = _.merge(
                     child.properties,
@@ -113,9 +118,10 @@ function getRelations(parentUrl) {
                 }
             }
 
-            if(parent) {
-                records.push(parent);
+            if(parent && !_.find(records, record => record.url === parent.url)) {
+                records.push(_.merge(parent, {likes: 0}));
             }
+
 
             var deduplicatedRecords = _.uniq(records, 'url');
             var sortedRecords = _.sortBy(deduplicatedRecords, record => record.likes).reverse();

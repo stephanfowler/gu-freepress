@@ -153,7 +153,7 @@ var Suggestions = React.createClass({
     componentDidMount: function () {
         marmottajax({
             method: "get",
-            url: 'http://juicer.api.bbci.co.uk/articles',
+            url: 'https://juicer.api.bbci.co.uk/articles',
             json: true,
             parameters: {
                 api_key: 'iCNGx8l4R3Pf2ge9itNAvz3MXOVK9lyG',
@@ -257,6 +257,5 @@ React.render(React.createElement(
         parentUrl: INITIAL.parentUrl,
         items: INITIAL.items,
         title: INITIAL.title,
-        asGuPopup: INITIAL.asGuPopup }),
-    React.createElement(Suggestions, { items: [], bubbles: INITIAL.items, parentUrl: INITIAL.parentUrl })
+        asGuPopup: INITIAL.asGuPopup })
 ), document.getElementById('app-container'));
