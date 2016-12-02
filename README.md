@@ -1,8 +1,8 @@
 # Open Bubble
 
-[Slides](https://docs.google.com/presentation/d/e/2PACX-1vTVCQGUfIxj5Nz_KDx7_6_qZkDNcWMgsztArVYGJiyJnpL_yaCygOKlettoSehFK3T7ecZ36PCAStgt/pub?start=false&loop=false&delayms=3000&slide=id.p)
+[Presentation](https://docs.google.com/presentation/d/e/2PACX-1vTVCQGUfIxj5Nz_KDx7_6_qZkDNcWMgsztArVYGJiyJnpL_yaCygOKlettoSehFK3T7ecZ36PCAStgt/pub?start=false&loop=false&delayms=3000&slide=id.p)
 
-_Developed by The Guardian
+Developed by The Guardian
 
 ## Installing the extension
 
