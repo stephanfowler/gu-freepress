@@ -11,7 +11,8 @@ resolvers ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play" % "2.3.6",
-  "org.anormcypher" %% "anormcypher" % "0.6.0"
+  "org.anormcypher" %% "anormcypher" % "0.6.0",
+  "scala-opengraph" %% "scala-opengraph" % "0.1"
 )
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)

@@ -6,28 +6,62 @@
   <title>GU Free Press</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="utf-8">
+  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+  <style type="text/css">
+    .main-container {
+      width: 90em;
+      padding: 0 5em 5em 5em;
+    }
+  </style>
 <body>
 
-<div>
+<div class="main-container">
   <h1>GU Free Press</h1>
 
-  <form action='/associateFormPost' method='post'>
-    <label>Article One</label>
-    <input name='from' value=''>
-    <label>Article Two</label>
-    <input name='to' value=''>
-    <input type='submit' value='Submit' />
+  <form class="pure-form pure-form-aligned" action='/associateFormPost' method='post'>
+    <div class="pure-control-group">
+      <label>Article One</label>
+      <input name='from' value=''>
+    </div>
+    <div class="pure-control-group">
+      <label>Article Two</label>
+      <input name='to' value=''>
+    </div>
+    <div class="pure-control-group">
+      <label>Weight</label>
+      <input name='weight' value=''>
+    </div>
+    <div class="pure-controls">
+      <input class="pure-button pure-button-primary" type='submit' value='Submit' />
+    </div>
   </form>
 
   <section>
-    @relations.map { relation =>
-      <h2>@relation.article.id</h2>
-      @relation.relations.map { article =>
-        <div>
-          @article.id
+    <h2>Relationships:</h2>
+    <div class="pure-g relation-list">
+      @relations.map { relation =>
+        <div class="pure-u-5-5">
+          <h2>@relation.article.title</h2>
+          <h5>@relation.article.id</h5>
+          <table class="pure-table pure-table-bordered">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>title</th>
+              </tr>
+            </thead>
+            <tbody>
+            @relation.relations.map { article =>
+              <tr>
+                <td>@article.id</td>
+                <td>@article.title</td>
+              </tr>
+            }
+            </tbody>
+          </table>
         </div>
       }
-    }
+  </div>
   </section>
 </div>
 
